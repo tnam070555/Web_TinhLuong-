@@ -89,12 +89,71 @@ button.ghost-danger:hover { border-color: var(--danger); }
 .brandbar .tag { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .brandbar .tag b { color: var(--accent); font-weight: 600; }
 
-/* Top bar */
-.topbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; padding-top: 18px; }
-.brand { min-width: 0; }
+/* Top bar = photo banner (đồi cafe Mường Ảng) */
+.topbar {
+  position: relative; overflow: hidden; isolation: isolate; border-radius: var(--r-lg);
+  min-height: 280px; padding: 32px; margin-top: 10px;
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px;
+  background: #1a1612; color: #fff; box-shadow: var(--shadow);
+}
+.topbar .photo {
+  position: absolute; inset: 0; z-index: -2;
+  background: url("https://theme.hstatic.net/1000383842/1001179249/14/home_slider_image_1.jpg?v=2814") center 40%/cover no-repeat;
+}
+.topbar::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(10, 8, 6, 0.82) 0%, rgba(10, 8, 6, 0.45) 55%, rgba(10, 8, 6, 0.15) 100%),
+              linear-gradient(0deg, rgba(10, 8, 6, 0.55) 0%, transparent 55%);
+}
+.topbar .credit { position: absolute; top: 14px; right: 18px; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
+.brand { min-width: 0; max-width: 560px; }
 .kicker { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 8px; }
-.brand h1 { margin: 0; font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 2.8rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; text-wrap: balance; }
-.brand p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; }
+.topbar .kicker { color: #ff8a95; }
+.brand h1 { margin: 0; font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; text-wrap: balance; }
+.brand p { margin: 8px 0 0; color: rgba(255, 255, 255, 0.82); font-size: 0.95rem; }
+.topbar #thisMonth { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); color: #fff; backdrop-filter: blur(6px); }
+.topbar #thisMonth:hover { background: #fff; color: #161616; }
+.topbar .pill { background: rgba(255, 255, 255, 0.95); border-color: transparent; color: #161616; }
+.topbar .pill button { color: #161616; }
+.topbar .pill button:hover { background: #161616; color: #fff; }
+
+/* Gallery (Góc THAIYEN) */
+.gallery-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.gallery-head h2 { margin: 0; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; line-height: 1.2; }
+.gallery-head p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.gallery { display: grid; grid-template-columns: 1.6fr 1fr 1fr; grid-template-rows: repeat(2, 200px); gap: 12px; }
+.g-item { position: relative; overflow: hidden; margin: 0; background: var(--cell); border-radius: var(--r-lg); min-width: 0; }
+.g-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.g-item.prod { background: #f3efe8; }
+.g-item.prod img { object-fit: contain; padding: 14px 14px 40px; }
+.g-item.big { grid-row: span 2; }
+.g-item figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 14px; font-size: 0.8rem; font-weight: 500; color: #161616;
+  display: flex; justify-content: space-between; gap: 8px;
+}
+.g-item figcaption small { color: #6b6258; font-weight: 400; }
+.g-item.big figcaption { color: #fff; padding: 40px 18px 16px; background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), transparent); display: grid; gap: 2px; }
+.g-item.big figcaption b { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; }
+.g-item.big figcaption small { color: rgba(255, 255, 255, 0.8); }
+
+/* Editor cover photo (mặt tiền quán) */
+.ed-cover { position: relative; margin: -22px -22px 18px; height: 150px; overflow: hidden; background: #2a2622; }
+.ed-cover img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block; }
+.ed-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0) 65%); }
+.ed-cover span { position: absolute; left: 18px; bottom: 12px; z-index: 1; color: #fff; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+.ed-cover span b { color: #ff8a95; font-weight: 600; }
+
+/* Product strip under calendar */
+.cal-strip { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+.cal-strip .txt b { display: block; font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; line-height: 1.25; }
+.cal-strip .txt span { font-size: 0.8rem; color: var(--muted); }
+.cal-strip .thumbs { display: flex; gap: 8px; }
+.cal-strip .thumbs img { width: 84px; height: 84px; object-fit: contain; background: #f3efe8; border-radius: var(--r-md); padding: 6px; }
+
+/* Footer */
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 22px 0 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+.foot img { height: 16px; width: auto; filter: var(--logo-filter); }
+.emptystate img { width: 96px; height: 96px; object-fit: contain; margin: 0 auto 10px; display: block; }
 .monthnav { display: flex; align-items: center; gap: 8px; }
 .pill { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; padding: 3px; }
 .pill button { border: none; background: transparent; width: 34px; height: 34px; padding: 0; border-radius: 2px; font-size: 1.2rem; line-height: 1; display: grid; place-items: center; }
@@ -111,7 +170,13 @@ button.ghost-danger:hover { border-color: var(--danger); }
     linear-gradient(135deg, var(--hero-bg) 0%, var(--hero-bg2) 100%);
   display: grid; gap: 18px; box-shadow: var(--shadow);
 }
-.salary::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+.salary::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); z-index: 1; }
+.salary::after {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 55%; pointer-events: none;
+  background: url("https://cdn.hstatic.net/files/1000383842/article/muongang_6d334cbdab914fe3a315dbe16b2d2ec5_grande.png") center/cover no-repeat;
+  opacity: 0.3; -webkit-mask-image: linear-gradient(90deg, transparent, #000 70%); mask-image: linear-gradient(90deg, transparent, #000 70%);
+}
+.salary > * { position: relative; z-index: 1; }
 .salary .eyebrow { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hero-muted); font-weight: 500; margin-bottom: 6px; }
 .salary .amount { font-family: var(--font-num); font-weight: 700; font-size: clamp(2.4rem, 5.5vw, 3.4rem); line-height: 1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 .salary .amount small { font-size: 0.5em; color: var(--hero-muted); margin-left: 6px; }
@@ -220,15 +285,26 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--surface); padding: 12px 20px; border-radius: 2px; border-left: 3px solid var(--accent); font-size: 0.875rem; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); box-shadow: var(--shadow); }
 
 @media (max-width: 960px) {
+  .gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 240px repeat(2, 180px); }
+  .g-item.big { grid-column: span 2; grid-row: auto; }
   .hero { grid-template-columns: minmax(0, 1fr); }
   .main { grid-template-columns: minmax(0, 1fr); }
   .editor { position: static; }
 }
 @media (max-width: 520px) {
   .brandbar .tag { display: none; }
+  .topbar { padding: 22px 18px; min-height: 300px; }
+  .topbar .credit { display: none; }
+  .gallery { grid-template-rows: 200px repeat(2, 150px); gap: 8px; }
+  .g-item.prod img { padding: 10px 10px 34px; }
+  .g-item figcaption { padding: 8px 10px; font-size: 0.75rem; }
+  .g-item.prod figcaption small { display: none; }
   .tile { padding: 14px; }
   .tile .v { font-size: 1.3rem; }
   .panel { padding: 16px; }
+  .ed-cover { margin: -16px -16px 16px; height: 120px; }
+  .cal-strip { grid-template-columns: minmax(0, 1fr); }
+  .cal-strip .thumbs img { width: 64px; height: 64px; }
   .salary { padding: 22px 20px 18px; }
   .day { min-height: 60px; padding: 5px 6px; }
   .day .m { display: none; }
@@ -251,6 +327,8 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
 
 <div class="wrap">
   <header class="topbar">
+    <div class="photo" role="img" aria-label="Đồi cafe Mường Ảng, Điện Biên"></div>
+    <span class="credit">Mường Ảng · Điện Biên</span>
     <div class="brand">
       <p class="kicker">THAIYEN CAFE · Chấm công</p>
       <h1>Sổ Lương Cá Nhân</h1>
@@ -284,7 +362,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     <div class="tiles">
       <div class="tile"><span class="k"><i></i>Giờ công</span><span class="v" id="sumHours">0 h</span><span class="s" id="sumOt">Tăng ca 0 h</span></div>
       <div class="tile"><span class="k"><i style="background:var(--muted)"></i>Lương theo giờ</span><span class="v" id="sumBase">0 ₫</span><span class="s">Gồm cả tăng ca</span></div>
-      <div class="tile"><span class="k"><i style="background:var(--warm)"></i>Phụ cấp</span><span class="v" id="sumAllow">0 ₫</span><span class="s">Trong tháng</span></div>
+      <div class="tile"><span class="k"><i style="background:var(--warm)"></i>Phụ cấp</span><span class="v" id="sumAllow">0 ₫</span><span class="s">Gồm phụ cấp ca dài</span></div>
       <div class="tile total"><span class="k"><i></i>Tổng tích lũy</span><span class="v" id="sumAll">0 ₫</span><span class="s" id="sumAllSub">Tất cả các tháng</span></div>
     </div>
   </section>
@@ -299,9 +377,24 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         </div>
       </div>
       <div class="cal" id="cal"></div>
+      <div class="cal-strip">
+        <div class="txt">
+          <b>Cafe tiện lợi THAIYEN</b>
+          <span>Phin giấy, túi nhúng và hạt Continental Deep, những món bạn pha mỗi ca.</span>
+        </div>
+        <div class="thumbs">
+          <img src="https://cdn.hstatic.net/products/1000383842/phin_gi_y_81300204a8a2447e89b1b3faaffac4bc_large.png" alt="Hộp Cafe Phin Giấy" loading="lazy">
+          <img src="https://cdn.hstatic.net/products/1000383842/t_i_nh_ng_92cacdc135b54c87b1f661fff00a9b0b_large.png" alt="Hộp Cafe Túi Nhúng" loading="lazy">
+          <img src="https://cdn.hstatic.net/products/1000383842/cd250_f525754fe9ee4b9ab504b301816e5c56_large.png" alt="Continental Deep 250g" loading="lazy">
+        </div>
+      </div>
     </section>
 
     <aside class="panel editor" aria-label="Nhập công">
+      <div class="ed-cover">
+        <img src="https://cdn.hstatic.net/files/1000383842/article/dscf5022-dai_dien_bai_viet_d58b2fe104ea46c4a6ff59201c11d0e9_grande.jpg" alt="Mặt tiền quán THAIYEN" loading="lazy">
+        <span><b>Nhập công</b> · Ca làm tại THAIYEN</span>
+      </div>
       <div class="panel-head" style="align-items:flex-start">
         <div>
           <p class="date-big" id="editDate">16/11</p>
@@ -369,7 +462,17 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
               <input type="number" id="sOt" min="1" max="5" step="0.1" placeholder="1.5">
             </div>
           </div>
-          <p class="hint">Lương/giờ mặc định được điền sẵn cho ngày mới. Ngày đã lưu giữ nguyên mức lương lúc lưu.</p>
+          <div class="row2">
+            <div class="field">
+              <label for="sBonus">Phụ cấp ca dài (₫)</label>
+              <input type="text" id="sBonus" inputmode="numeric" placeholder="30.000">
+            </div>
+            <div class="field">
+              <label for="sMin">Khi ca từ (giờ)</label>
+              <input type="number" id="sMin" min="0.5" max="24" step="0.5" placeholder="8">
+            </div>
+          </div>
+          <p class="hint">Lương/giờ mặc định được điền sẵn cho ngày mới. Ngày đã lưu giữ nguyên mức lương lúc lưu. Phụ cấp ca dài tự cộng cho mọi ngày có tổng giờ (gồm tăng ca) đạt ngưỡng; để trống hoặc 0 để tắt.</p>
           <button type="button" id="saveSettings">Lưu cài đặt</button>
         </div>
       </details>
@@ -387,6 +490,43 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
       </table>
     </div>
   </section>
+
+  <section aria-label="Góc THAIYEN">
+    <div class="gallery-head">
+      <div>
+        <p class="kicker">Góc THAIYEN</p>
+        <h2>Từ đồi cafe đến từng ly phục vụ</h2>
+      </div>
+      <p>Mỗi giờ công là một ly cafe ngon đến tay khách.</p>
+    </div>
+    <div class="gallery">
+      <figure class="g-item big">
+        <img src="https://cdn.hstatic.net/files/1000383842/article/muongang_6d334cbdab914fe3a315dbe16b2d2ec5_grande.png" alt="Hạt cafe Mường Ảng, Điện Biên" loading="lazy">
+        <figcaption><b>Single Origin Mường Ảng</b><small>Hạt cafe Điện Biên, sơ chế Natural</small></figcaption>
+      </figure>
+      <figure class="g-item prod">
+        <img src="https://cdn.hstatic.net/products/1000383842/cafe_mu_i_dine_in_16c70ff087484425a53a8d32ec5009f1_large.png" alt="Cafe Muối" loading="lazy">
+        <figcaption>Cafe Muối<small>Ly cafe</small></figcaption>
+      </figure>
+      <figure class="g-item prod">
+        <img src="https://cdn.hstatic.net/products/1000383842/tira_4cecbc60381b4eefb091660f062df410_large.png" alt="Tiramisu" loading="lazy">
+        <figcaption>Tiramisu<small>Tráng miệng</small></figcaption>
+      </figure>
+      <figure class="g-item prod">
+        <img src="https://cdn.hstatic.net/products/1000383842/cc250_36932fcf71b34b829558dd21a3a3d1ad_large.png" alt="Continental Cherry" loading="lazy">
+        <figcaption>Continental Cherry<small>Hạt rang 250g</small></figcaption>
+      </figure>
+      <figure class="g-item prod">
+        <img src="https://cdn.hstatic.net/products/1000383842/cheesse_5f3db8a48747404db3704491ce9644b6_large.png" alt="Cheese Burnt" loading="lazy">
+        <figcaption>Cheese Burnt<small>Tráng miệng</small></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <img src="https://theme.hstatic.net/1000383842/1001179249/14/logo.png?v=2814" alt="THAIYEN">
+    <span>Sổ lương nội bộ · THAIYEN CAFE</span>
+  </footer>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -416,17 +556,23 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
 
   const state = {
     entries: new Map(),
-    settings: { rate: 0, otMul: 1.5 },
+    settings: { rate: 0, otMul: 1.5, shiftBonus: 30000, shiftMin: 8 },
     month: todayStr.slice(0, 7),
     selected: todayStr,
     mode: "loading",
     readOnly: false,
   };
 
+  // Phụ cấp ca dài: ca (giờ công + tăng ca) đạt ngưỡng thì cộng tự động
+  const bonusOf = (e) => {
+    const s = state.settings;
+    const t = (Number(e.hours) || 0) + (Number(e.ot) || 0);
+    return s.shiftBonus > 0 && t >= (Number(s.shiftMin) || 8) ? Number(s.shiftBonus) : 0;
+  };
   const payOf = (e, otMul) => {
     const rate = Number(e.rate) || 0;
     const mul = Number(e.otMul) || otMul || 1.5;
-    return (Number(e.hours) || 0) * rate + (Number(e.ot) || 0) * rate * mul + (Number(e.allowance) || 0);
+    return (Number(e.hours) || 0) * rate + (Number(e.ot) || 0) * rate * mul + (Number(e.allowance) || 0) + bonusOf(e);
   };
 
   /* ---------- storage: shared db when available, this browser otherwise ---------- */
@@ -463,7 +609,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     state.mode = "local";
     const o = local.load();
     state.entries = new Map(Object.entries(o.entries || {}));
-    if (o.settings) state.settings = o.settings;
+    if (o.settings) state.settings = { ...state.settings, ...o.settings };
     setStatus("warn", reason || "Đang lưu trên trình duyệt này");
     fillSettings(); render(); fillForm();
   }
@@ -489,7 +635,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
       render(); if (!formDirty) fillForm();
     }, (err) => { clearTimeout(timer); setStatus("warn", "Mất kết nối dữ liệu (" + err.code + ")"); });
     db.doc("config/main").onSnapshot((snap) => {
-      if (snap.exists) { const v = snap.data(); state.settings = { rate: Number(v.rate) || 0, otMul: Number(v.otMul) || 1.5 }; }
+      if (snap.exists) { const v = snap.data(); state.settings = { rate: Number(v.rate) || 0, otMul: Number(v.otMul) || 1.5, shiftBonus: v.shiftBonus == null ? 30000 : Number(v.shiftBonus) || 0, shiftMin: Number(v.shiftMin) || 8 }; }
       if (!snap.metadata.fromCache) { firstCfg = true; done(); }
       fillSettings(); render(); if (!formDirty) fillForm();
     }, () => {});
@@ -512,7 +658,8 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     list.forEach((e) => {
       const p = payOf(e, otMul);
       h += Number(e.hours) || 0; ot += Number(e.ot) || 0;
-      allow += Number(e.allowance) || 0; total += p; base += p - (Number(e.allowance) || 0);
+      const al = (Number(e.allowance) || 0) + bonusOf(e);
+      allow += al; total += p; base += p - al;
     });
     const all = [...state.entries.values()].reduce((s, e) => s + payOf(e, otMul), 0);
     const months = new Set([...state.entries.keys()].map((k) => k.slice(0, 7))).size;
@@ -584,8 +731,11 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
       td.colSpan = 7; td.className = "emptystate";
       if (state.mode === "loading") td.textContent = "Đang tải dữ liệu…";
       else {
+        const im = document.createElement("img"); im.alt = ""; im.loading = "lazy";
+        im.src = "https://cdn.hstatic.net/products/1000383842/nau_da_6c137a0e20674a438644f9a08cbb3ab9_large.png";
+        im.onerror = () => im.remove();
         const b = document.createElement("b"); b.textContent = "Tháng này chưa có ngày công";
-        td.append(b, "Chọn một ngày trên bảng chấm công, nhập số giờ rồi bấm Lưu ngày công.");
+        td.append(im, b,"Chọn một ngày trên bảng chấm công, nhập số giờ rồi bấm Lưu ngày công.");
       }
       tr.appendChild(td); tb.appendChild(tr);
     } else {
@@ -595,7 +745,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         const first = document.createElement("td");
         const wd = document.createElement("span"); wd.className = "wd"; wd.textContent = DOW[(new Date(e.date + "T00:00:00").getDay() + 6) % 7];
         first.append(wd, dd + "/" + mm); tr.appendChild(first);
-        [hrs(e.hours), Number(e.ot) ? hrs(e.ot) : "–", money(e.rate), Number(e.allowance) ? money(e.allowance) : "–", money(payOf(e, otMul))].forEach((c, i) => {
+        [hrs(e.hours), Number(e.ot) ? hrs(e.ot) : "–", money(e.rate), ((Number(e.allowance) || 0) + bonusOf(e)) ? money((Number(e.allowance) || 0) + bonusOf(e)) : "–", money(payOf(e, otMul))].forEach((c, i) => {
           const td = document.createElement("td"); td.textContent = c; td.className = "num" + (i === 4 ? " pay" : ""); tr.appendChild(td);
         });
         const n = document.createElement("td"); n.className = "note l"; n.textContent = e.note || ""; tr.appendChild(n);
@@ -635,6 +785,8 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
   function fillSettings() {
     if (document.activeElement !== $("sRate")) $("sRate").value = fmtInput(state.settings.rate);
     if (document.activeElement !== $("sOt")) $("sOt").value = state.settings.otMul;
+    if (document.activeElement !== $("sBonus")) $("sBonus").value = fmtInput(state.settings.shiftBonus);
+    if (document.activeElement !== $("sMin")) $("sMin").value = state.settings.shiftMin;
     if (!state.settings.rate && state.mode !== "loading") $("settingsBox").open = true;
   }
   function readForm() {
@@ -656,12 +808,13 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     if (f.hours) parts.push(f.hours + "h × " + VND.format(f.rate));
     if (f.ot) parts.push(f.ot + "h × " + VND.format(f.rate) + " × " + f.otMul);
     if (f.allowance) parts.push(VND.format(f.allowance) + " phụ cấp");
+    const sb = bonusOf(f); if (sb) parts.push(VND.format(sb) + " phụ cấp ca ≥" + state.settings.shiftMin + "h");
     $("fBreak").textContent = parts.join(" + ");
     document.querySelectorAll("#quickHours button").forEach((b) => b.classList.toggle("on", Number(b.dataset.h) === f.hours));
   }
 
   ["fHours", "fOt", "fAllow", "fRate", "fNote"].forEach((id) => $(id).addEventListener("input", () => { formDirty = true; updatePreview(); }));
-  ["fAllow", "fRate", "sRate"].forEach((id) => $(id).addEventListener("blur", () => { $(id).value = fmtInput(parseMoney($(id).value)); }));
+  ["fAllow", "fRate", "sRate", "sBonus"].forEach((id) => $(id).addEventListener("blur", () => { $(id).value = fmtInput(parseMoney($(id).value)); }));
   document.querySelectorAll("#quickHours button").forEach((b) => b.addEventListener("click", () => { $("fHours").value = b.dataset.h; formDirty = true; updatePreview(); }));
   $("fDate").addEventListener("change", () => {
     const v = $("fDate").value; if (!v) return;
@@ -697,7 +850,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     catch (err) { writeErr(err); }
   });
   $("saveSettings").addEventListener("click", async () => {
-    const s = { rate: parseMoney($("sRate").value), otMul: Math.min(5, Math.max(1, Number($("sOt").value) || 1.5)) };
+    const s = { rate: parseMoney($("sRate").value), otMul: Math.min(5, Math.max(1, Number($("sOt").value) || 1.5)), shiftBonus: parseMoney($("sBonus").value), shiftMin: Math.min(24, Math.max(0.5, Number($("sMin").value) || 8)) };
     try { await store.putSettings(s); state.settings = s; toast("Đã lưu cài đặt."); if (!state.entries.get(state.selected)) fillForm(); render(); }
     catch (err) { writeErr(err); }
   });
