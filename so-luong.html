@@ -1,0 +1,718 @@
+<title>Sổ Lương Cá Nhân</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="https://theme.hstatic.net/1000383842/1001179249/14/favicon.png?v=2814">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap">
+<style>
+/* Layout: THAIYEN brand bar, black salary card + stat tiles, timesheet heatmap beside a sticky day editor, detail table last */
+:root {
+  --bg: #f6f4f0;
+  --surface: #ffffff;
+  --ink: #161616;
+  --gray: #4a4c57;
+  --muted: #7b7d86;
+  --line: #e6e3dd;
+  --cell: #f3f0ea;
+  --accent: #be1e2d;
+  --accent-strong: #9a1724;
+  --accent-soft: #f8e7e8;
+  --accent-ink: #ffffff;
+  --warm: #b7791f;
+  --warm-soft: #f6ecda;
+  --danger: #be1e2d;
+  --hero-bg: #111111;
+  --hero-bg2: #1e1e21;
+  --hero-ink: #ffffff;
+  --hero-muted: rgba(255, 255, 255, 0.58);
+  --hero-line: rgba(255, 255, 255, 0.05);
+  --hero-bar: #d8323f;
+  --hero-bar-empty: rgba(255, 255, 255, 0.12);
+  --logo-filter: none;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 28px -16px rgba(0, 0, 0, 0.22);
+  --font-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "EB Garamond", Georgia, serif;
+  --font-num: "Be Vietnam Pro", system-ui, sans-serif;
+  --r-lg: 2px;
+  --r-md: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0e0f; --surface: #18181a; --ink: #eeeae4; --gray: #b9bac1; --muted: #9a9ca4; --line: #2a2a2d; --cell: #202023;
+    --accent: #e0485a; --accent-strong: #f27c89; --accent-soft: #3a1a1e; --accent-ink: #ffffff;
+    --warm: #e0a85a; --warm-soft: #3a2c19; --danger: #f27c89;
+    --hero-bg: #000000; --hero-bg2: #161618; --hero-ink: #ffffff; --hero-muted: rgba(255, 255, 255, 0.55);
+    --hero-line: rgba(255, 255, 255, 0.04); --hero-bar: #e0485a; --hero-bar-empty: rgba(255, 255, 255, 0.1);
+    --logo-filter: invert(1);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -16px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e0e0f; --surface: #18181a; --ink: #eeeae4; --gray: #b9bac1; --muted: #9a9ca4; --line: #2a2a2d; --cell: #202023;
+  --accent: #e0485a; --accent-strong: #f27c89; --accent-soft: #3a1a1e; --accent-ink: #ffffff;
+  --warm: #e0a85a; --warm-soft: #3a2c19; --danger: #f27c89;
+  --hero-bg: #000000; --hero-bg2: #161618; --hero-ink: #ffffff; --hero-muted: rgba(255, 255, 255, 0.55);
+  --hero-line: rgba(255, 255, 255, 0.04); --hero-bar: #e0485a; --hero-bar-empty: rgba(255, 255, 255, 0.1);
+  --logo-filter: invert(1);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -16px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 56px;
+}
+.wrap {
+  max-width: 1200px; margin: 0 auto; display: grid; gap: 22px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border-radius: 2px; border: 1px solid var(--line); background: var(--surface); padding: 9px 16px; font-weight: 500; font-size: 0.88rem; letter-spacing: 0.02em; }
+button:hover { border-color: var(--ink); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, .day:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: 0.6; cursor: default; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.82rem; }
+button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+button.ghost-danger { color: var(--danger); background: transparent; }
+button.ghost-danger:hover { border-color: var(--danger); }
+
+/* Brand bar (THAIYEN) */
+.brandbar { background: var(--surface); border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.brandbar .in { max-width: 1200px; margin: 0 auto; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.brandbar img { height: 20px; width: auto; display: block; filter: var(--logo-filter); }
+.brandbar .tag { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.brandbar .tag b { color: var(--accent); font-weight: 600; }
+
+/* Top bar */
+.topbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; padding-top: 18px; }
+.brand { min-width: 0; }
+.kicker { font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 8px; }
+.brand h1 { margin: 0; font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 2.8rem); font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; text-wrap: balance; }
+.brand p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; }
+.monthnav { display: flex; align-items: center; gap: 8px; }
+.pill { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; padding: 3px; }
+.pill button { border: none; background: transparent; width: 34px; height: 34px; padding: 0; border-radius: 2px; font-size: 1.2rem; line-height: 1; display: grid; place-items: center; }
+.pill button:hover { background: var(--ink); color: var(--surface); }
+.pill .label { min-width: 130px; text-align: center; font-family: var(--font-serif); font-weight: 500; font-size: 1.15rem; }
+#thisMonth { height: 42px; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 16px; }
+.salary {
+  position: relative; overflow: hidden; border-radius: var(--r-lg); color: var(--hero-ink); padding: 28px 28px 22px;
+  background:
+    repeating-radial-gradient(circle at 115% -20%, transparent 0 12px, var(--hero-line) 12px 13px),
+    linear-gradient(135deg, var(--hero-bg) 0%, var(--hero-bg2) 100%);
+  display: grid; gap: 18px; box-shadow: var(--shadow);
+}
+.salary::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+.salary .eyebrow { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--hero-muted); font-weight: 500; margin-bottom: 6px; }
+.salary .amount { font-family: var(--font-serif); font-weight: 500; font-size: clamp(2.6rem, 6vw, 3.8rem); line-height: 1; letter-spacing: -0.01em; overflow-wrap: anywhere; font-variant-numeric: lining-nums tabular-nums; }
+.salary .amount small { font-size: 0.5em; color: var(--hero-muted); margin-left: 6px; }
+.salary .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 0.78rem; padding: 4px 10px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); color: var(--hero-ink); border: 1px solid rgba(255, 255, 255, 0.12); }
+.chip.dark { background: var(--accent-soft); color: var(--accent-strong); }
+.bars { display: grid; gap: 6px; }
+.bars-row { display: flex; align-items: flex-end; gap: 3px; height: 64px; }
+.bar { flex: 1 1 0; min-width: 0; border-radius: 1px; background: var(--hero-bar-empty); height: 4px; }
+.bar.on { background: var(--hero-bar); }
+.bar.today { outline: 1px solid var(--hero-ink); outline-offset: 1px; }
+.bars-axis { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--hero-muted); font-family: var(--font-num); }
+
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--surface); border: 1px solid var(--line); }
+.tile { padding: 18px 20px; display: grid; gap: 4px; align-content: start; min-width: 0; border-bottom: 1px solid var(--line); }
+.tile:nth-child(odd) { border-right: 1px solid var(--line); }
+.tile:nth-child(n+3) { border-bottom: 0; }
+.tile .k { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.tile .k i { width: 8px; height: 8px; border-radius: 0; background: var(--accent); }
+.tile .v { font-family: var(--font-serif); font-variant-numeric: lining-nums tabular-nums; font-size: 1.65rem; font-weight: 500; line-height: 1.15; overflow-wrap: anywhere; }
+.tile .s { font-size: 0.78rem; color: var(--muted); }
+.tile.total { background: var(--accent-soft); }
+.tile.total .v { color: var(--accent-strong); }
+
+/* Main grid */
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; min-width: 0; }
+.panel h2 { margin: 0; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; line-height: 1.2; }
+.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.legend { display: flex; gap: 14px; font-size: 0.76rem; color: var(--muted); flex-wrap: wrap; align-items: center; }
+.legend .scale { display: inline-flex; gap: 2px; vertical-align: -2px; margin: 0 4px; }
+.legend .scale b { width: 12px; height: 12px; border-radius: 1px; display: inline-block; }
+.legend .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warm); display: inline-block; margin-right: 4px; }
+
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.dow { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); text-align: center; font-weight: 600; padding-bottom: 6px; }
+.dow.sun { color: var(--danger); }
+.day {
+  position: relative; background: var(--cell); border: 1px solid transparent; border-radius: 2px; min-height: 84px; padding: 8px 9px;
+  display: grid; grid-template-rows: auto 1fr auto; text-align: left; gap: 2px; min-width: 0; font-weight: 400;
+}
+.day:hover { border-color: var(--ink); }
+.day.empty { visibility: hidden; }
+.day .d { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.day.sun .d { color: var(--danger); }
+.day .h { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 500; align-self: end; color: var(--ink); line-height: 1; font-variant-numeric: lining-nums; }
+.day .m { font-family: var(--font-num); font-size: 0.7rem; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.day .otdot { position: absolute; top: 9px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--warm); }
+.day.today .d { background: var(--ink); color: var(--surface); border-radius: 1px; padding: 0 6px; justify-self: start; }
+.day.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+
+/* Editor */
+.editor { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
+.editor .date-big { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 500; margin: 0; line-height: 1; font-variant-numeric: lining-nums; }
+.editor .date-sub { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
+.badge { font-size: 0.68rem; font-weight: 600; padding: 4px 10px; border-radius: 1px; background: var(--cell); color: var(--muted); white-space: nowrap; letter-spacing: 0.1em; text-transform: uppercase; }
+.badge.saved { background: var(--accent); color: var(--accent-ink); }
+form { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 0.7rem; font-weight: 500; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+.field input, .field textarea { border: 1px solid var(--line); border-radius: 2px; background: var(--surface); padding: 10px 12px; width: 100%; min-width: 0; }
+.field input:focus, .field textarea:focus { border-color: var(--ink); outline: none; }
+.field textarea { resize: vertical; min-height: 64px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quick { display: flex; gap: 6px; flex-wrap: wrap; }
+.quick button { padding: 5px 12px; font-size: 0.8rem; border-radius: 2px; background: var(--surface); border-color: var(--line); color: var(--gray); }
+.quick button:hover { border-color: var(--ink); color: var(--ink); }
+.quick button.on { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.preview { display: grid; gap: 2px; padding: 16px 18px; border-radius: 2px; background: var(--hero-bg); color: var(--hero-ink); border-left: 3px solid var(--accent); }
+.preview span { font-size: 0.7rem; color: var(--hero-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.18em; }
+.preview strong { font-family: var(--font-serif); font-weight: 500; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: lining-nums; }
+.preview em { font-style: normal; font-size: 0.76rem; color: var(--hero-muted); font-family: var(--font-num); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.actions .primary { flex: 1; padding-block: 13px; }
+.confirm { display: grid; gap: 8px; padding: 12px; border-radius: 2px; border: 1px solid var(--danger); }
+.confirm p { margin: 0; font-size: 0.85rem; }
+.hint { font-size: 0.78rem; color: var(--muted); margin: 0; }
+
+details.settings { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+details.settings summary { cursor: pointer; font-weight: 500; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+details.settings summary::-webkit-details-marker { display: none; }
+details.settings summary::after { content: "+"; color: var(--muted); font-size: 1.2rem; }
+details.settings[open] summary::after { content: "−"; }
+.settings-body { display: grid; gap: 12px; margin-top: 12px; }
+.status { font-size: 0.76rem; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 14px; }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.status.ok .dot { background: #2f8a5b; }
+.status.warn .dot { background: var(--warm); }
+
+/* Table */
+.tablewrap { overflow-x: auto; margin: 0 -4px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 12px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child, th.l, td.l { text-align: left; }
+th { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+td.pay { font-weight: 600; color: var(--accent); }
+td.note { white-space: normal; color: var(--muted); max-width: 260px; min-width: 140px; }
+td .wd { display: inline-block; min-width: 30px; color: var(--muted); font-size: 0.78rem; font-weight: 600; }
+tbody tr { cursor: pointer; }
+tbody tr:hover td { background: var(--cell); }
+tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--ink); }
+.emptystate { padding: 40px 12px; text-align: center; color: var(--muted); white-space: normal; }
+.emptystate b { display: block; color: var(--ink); font-family: var(--font-serif); font-weight: 500; font-size: 1.3rem; margin-bottom: 4px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--surface); padding: 12px 20px; border-radius: 2px; border-left: 3px solid var(--accent); font-size: 0.875rem; font-weight: 500; z-index: 20; max-width: calc(100% - 32px); box-shadow: var(--shadow); }
+
+@media (max-width: 960px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .editor { position: static; }
+}
+@media (max-width: 520px) {
+  .brandbar .tag { display: none; }
+  .tile { padding: 14px; }
+  .tile .v { font-size: 1.3rem; }
+  .panel { padding: 16px; }
+  .salary { padding: 22px 20px 18px; }
+  .day { min-height: 60px; padding: 5px 6px; }
+  .day .m { display: none; }
+  .day .h { font-size: 1rem; }
+  .day .otdot { top: 6px; right: 6px; }
+  .cal { gap: 3px; }
+  .pill .label { min-width: 110px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .day, button, .bar { transition: border-color .15s, background-color .15s, color .15s, height .3s ease; }
+}
+</style>
+
+<div class="brandbar">
+  <div class="in">
+    <img src="https://theme.hstatic.net/1000383842/1001179249/14/logo.png?v=2814" alt="THAIYEN">
+    <span class="tag"><b>Nội bộ</b> · Sổ lương nhân viên</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <p class="kicker">THAIYEN CAFE · Chấm công</p>
+      <h1>Sổ Lương Cá Nhân</h1>
+      <p>Chấm công từng ngày, cộng phụ cấp, biết ngay lương tháng.</p>
+    </div>
+    <div class="monthnav">
+      <div class="pill">
+        <button id="prevMonth" aria-label="Tháng trước">‹</button>
+        <div class="label" id="monthLabel">Tháng</div>
+        <button id="nextMonth" aria-label="Tháng sau">›</button>
+      </div>
+      <button id="thisMonth">Hôm nay</button>
+    </div>
+  </header>
+
+  <section class="hero" aria-label="Tổng kết">
+    <div class="salary">
+      <div>
+        <div class="eyebrow" id="sumMonthLabel">Lương tháng này</div>
+        <div class="amount" id="sumMonth">0<small>₫</small></div>
+      </div>
+      <div class="meta">
+        <span class="chip" id="chipDays">0 ngày công</span>
+        <span class="chip" id="chipAvg">TB 0 ₫/ngày</span>
+      </div>
+      <div class="bars" aria-hidden="true">
+        <div class="bars-row" id="bars"></div>
+        <div class="bars-axis" id="barsAxis"></div>
+      </div>
+    </div>
+    <div class="tiles">
+      <div class="tile"><span class="k"><i></i>Giờ công</span><span class="v" id="sumHours">0 h</span><span class="s" id="sumOt">Tăng ca 0 h</span></div>
+      <div class="tile"><span class="k"><i style="background:var(--muted)"></i>Lương theo giờ</span><span class="v" id="sumBase">0 ₫</span><span class="s">Gồm cả tăng ca</span></div>
+      <div class="tile"><span class="k"><i style="background:var(--warm)"></i>Phụ cấp</span><span class="v" id="sumAllow">0 ₫</span><span class="s">Trong tháng</span></div>
+      <div class="tile total"><span class="k"><i></i>Tổng tích lũy</span><span class="v" id="sumAll">0 ₫</span><span class="s" id="sumAllSub">Tất cả các tháng</span></div>
+    </div>
+  </section>
+
+  <div class="main">
+    <section class="panel" aria-label="Bảng chấm công">
+      <div class="panel-head">
+        <h2>Bảng chấm công</h2>
+        <div class="legend">
+          <span>Ít giờ<span class="scale" id="legendScale"></span>Nhiều giờ</span>
+          <span><span class="dot"></span>Có tăng ca</span>
+        </div>
+      </div>
+      <div class="cal" id="cal"></div>
+    </section>
+
+    <aside class="panel editor" aria-label="Nhập công">
+      <div class="panel-head" style="align-items:flex-start">
+        <div>
+          <p class="date-big" id="editDate">16/11</p>
+          <p class="date-sub" id="editSub">Thứ Hai, 2026</p>
+        </div>
+        <span class="badge" id="editBadge">Chưa có công</span>
+      </div>
+      <form id="entryForm" novalidate>
+        <div class="field">
+          <label for="fDate">Ngày</label>
+          <input type="date" id="fDate" required>
+        </div>
+        <div class="field">
+          <label for="fHours">Giờ công</label>
+          <input type="number" id="fHours" min="0" max="24" step="0.25" inputmode="decimal" placeholder="8">
+          <div class="quick" id="quickHours">
+            <button type="button" data-h="4">4 giờ</button>
+            <button type="button" data-h="8">8 giờ</button>
+            <button type="button" data-h="10">10 giờ</button>
+            <button type="button" data-h="12">12 giờ</button>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="fOt">Giờ tăng ca</label>
+            <input type="number" id="fOt" min="0" max="24" step="0.25" inputmode="decimal" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="fAllow">Phụ cấp (₫)</label>
+            <input type="text" id="fAllow" inputmode="numeric" placeholder="0">
+          </div>
+        </div>
+        <div class="field">
+          <label for="fRate">Lương/giờ (₫)</label>
+          <input type="text" id="fRate" inputmode="numeric" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="fNote">Ghi chú</label>
+          <textarea id="fNote" placeholder="Ví dụ: ca tối, phụ cấp xăng xe"></textarea>
+        </div>
+        <div class="preview"><span>Tiền ngày này</span><strong id="fTotal">0 ₫</strong><em id="fBreak"></em></div>
+        <div class="actions">
+          <button type="submit" class="primary" id="saveBtn">Lưu ngày công</button>
+          <button type="button" class="ghost-danger" id="delBtn" hidden>Xóa</button>
+        </div>
+        <div class="confirm" id="confirmRow" hidden>
+          <p>Xóa ngày công này? Không hoàn tác được.</p>
+          <div class="actions">
+            <button type="button" class="ghost-danger" id="delYes">Xóa hẳn</button>
+            <button type="button" id="delNo">Giữ lại</button>
+          </div>
+        </div>
+      </form>
+
+      <details class="settings" id="settingsBox">
+        <summary>Cài đặt mặc định</summary>
+        <div class="settings-body">
+          <div class="row2">
+            <div class="field">
+              <label for="sRate">Lương/giờ (₫)</label>
+              <input type="text" id="sRate" inputmode="numeric" placeholder="25.000">
+            </div>
+            <div class="field">
+              <label for="sOt">Hệ số tăng ca</label>
+              <input type="number" id="sOt" min="1" max="5" step="0.1" placeholder="1.5">
+            </div>
+          </div>
+          <p class="hint">Lương/giờ mặc định được điền sẵn cho ngày mới. Ngày đã lưu giữ nguyên mức lương lúc lưu.</p>
+          <button type="button" id="saveSettings">Lưu cài đặt</button>
+        </div>
+      </details>
+      <div class="status" id="status"><span class="dot"></span><span id="statusText">Đang kết nối…</span></div>
+    </aside>
+  </div>
+
+  <section class="panel" aria-label="Chi tiết tháng">
+    <div class="panel-head"><h2 id="tableTitle">Chi tiết tháng</h2></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Ngày</th><th>Giờ</th><th>Tăng ca</th><th>Lương/giờ</th><th>Phụ cấp</th><th>Thành tiền</th><th class="l">Ghi chú</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot id="tfoot"></tfoot>
+      </table>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const VND = new Intl.NumberFormat("vi-VN");
+  const money = (n) => VND.format(Math.round(n || 0)) + " ₫";
+  const short = (n) => {
+    n = Math.round(n || 0);
+    if (n >= 1e6) return (Math.round(n / 1e5) / 10).toLocaleString("vi-VN") + "tr";
+    if (n >= 1e3) return VND.format(Math.round(n / 1e3)) + "k";
+    return VND.format(n);
+  };
+  const hrs = (n) => (Math.round((n || 0) * 100) / 100).toLocaleString("vi-VN") + " h";
+  const parseMoney = (s) => { const d = String(s || "").replace(/[^\d]/g, ""); return d ? Number(d) : 0; };
+  const fmtInput = (n) => n ? VND.format(n) : "";
+  const pad = (n) => String(n).padStart(2, "0");
+  const ymd = (d) => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  const todayStr = ymd(new Date());
+  const DOW = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+  const DOW_LONG = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+  const heat = (t) => "color-mix(in srgb, var(--accent) " + Math.round(14 + t * 38) + "%, var(--cell))";
+
+  // legend scale
+  [0, 0.33, 0.66, 1].forEach((t) => { const b = document.createElement("b"); b.style.background = heat(t); $("legendScale").appendChild(b); });
+
+  const state = {
+    entries: new Map(),
+    settings: { rate: 0, otMul: 1.5 },
+    month: todayStr.slice(0, 7),
+    selected: todayStr,
+    mode: "loading",
+    readOnly: false,
+  };
+
+  const payOf = (e, otMul) => {
+    const rate = Number(e.rate) || 0;
+    const mul = Number(e.otMul) || otMul || 1.5;
+    return (Number(e.hours) || 0) * rate + (Number(e.ot) || 0) * rate * mul + (Number(e.allowance) || 0);
+  };
+
+  /* ---------- storage: shared db when available, this browser otherwise ---------- */
+  const LS_KEY = "so-luong-v1";
+  const local = {
+    load() {
+      try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch (e) {}
+      return { entries: {}, settings: null };
+    },
+    save() {
+      try { localStorage.setItem(LS_KEY, JSON.stringify({ entries: Object.fromEntries(state.entries), settings: state.settings })); } catch (e) {}
+    },
+  };
+  let db = null;
+
+  const store = {
+    async putEntry(e) {
+      if (db) await db.collection("entries").doc(e.date).set(e);
+      else { state.entries.set(e.date, e); local.save(); render(); }
+    },
+    async delEntry(date) {
+      if (db) await db.collection("entries").doc(date).delete();
+      else { state.entries.delete(date); local.save(); render(); }
+    },
+    async putSettings(s) {
+      if (db) await db.doc("config/main").set(s);
+      else { state.settings = s; local.save(); render(); }
+    },
+  };
+
+  function setStatus(kind, text) { $("status").className = "status " + kind; $("statusText").textContent = text; }
+
+  function useLocal(reason) {
+    state.mode = "local";
+    const o = local.load();
+    state.entries = new Map(Object.entries(o.entries || {}));
+    if (o.settings) state.settings = o.settings;
+    setStatus("warn", reason || "Đang lưu trên trình duyệt này");
+    fillSettings(); render(); fillForm();
+  }
+
+  async function connect() {
+    let api = null;
+    try { api = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { api = null; }
+    if (!api) { useLocal("Đang lưu trên trình duyệt này (chưa kết nối kho dữ liệu)"); return; }
+    db = api;
+    state.mode = "db";
+    try {
+      const user = await window.claude.use("user");
+      if (user && user.canEdit && (await user.canEdit()) === false) state.readOnly = true;
+    } catch (e) {}
+    let firstEntries = false, firstCfg = false;
+    const timer = setTimeout(() => setStatus("warn", "Chưa tải được dữ liệu, đang thử lại…"), 10000);
+    const done = () => { if (firstEntries && firstCfg) { clearTimeout(timer); setStatus("ok", state.readOnly ? "Chỉ xem" : "Đã đồng bộ"); } };
+    db.collection("entries").onSnapshot((snap) => {
+      const m = new Map();
+      snap.docs.forEach((d) => { const v = d.data(); if (v) m.set(d.id, { ...v, date: d.id }); });
+      state.entries = m;
+      if (!snap.metadata.fromCache) { firstEntries = true; done(); }
+      render(); if (!formDirty) fillForm();
+    }, (err) => { clearTimeout(timer); setStatus("warn", "Mất kết nối dữ liệu (" + err.code + ")"); });
+    db.doc("config/main").onSnapshot((snap) => {
+      if (snap.exists) { const v = snap.data(); state.settings = { rate: Number(v.rate) || 0, otMul: Number(v.otMul) || 1.5 }; }
+      if (!snap.metadata.fromCache) { firstCfg = true; done(); }
+      fillSettings(); render(); if (!formDirty) fillForm();
+    }, () => {});
+  }
+
+  /* ---------- rendering ---------- */
+  function monthEntries(month) {
+    return [...state.entries.values()].filter((e) => e.date && e.date.startsWith(month)).sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  function render() {
+    const [y, m] = state.month.split("-").map(Number);
+    $("monthLabel").textContent = "Tháng " + m + "/" + y;
+    $("sumMonthLabel").textContent = "Lương tháng " + m + "/" + y;
+    $("tableTitle").textContent = "Chi tiết tháng " + m + "/" + y;
+
+    const list = monthEntries(state.month);
+    const otMul = state.settings.otMul;
+    let h = 0, ot = 0, base = 0, allow = 0, total = 0;
+    list.forEach((e) => {
+      const p = payOf(e, otMul);
+      h += Number(e.hours) || 0; ot += Number(e.ot) || 0;
+      allow += Number(e.allowance) || 0; total += p; base += p - (Number(e.allowance) || 0);
+    });
+    const all = [...state.entries.values()].reduce((s, e) => s + payOf(e, otMul), 0);
+    const months = new Set([...state.entries.keys()].map((k) => k.slice(0, 7))).size;
+
+    const amt = $("sumMonth"); amt.textContent = VND.format(Math.round(total));
+    const sm = document.createElement("small"); sm.textContent = "₫"; amt.appendChild(sm);
+    $("chipDays").textContent = list.length + " ngày công · " + hrs(h + ot);
+    $("chipAvg").textContent = "TB " + (list.length ? money(total / list.length) : "0 ₫") + "/ngày";
+    $("sumHours").textContent = hrs(h);
+    $("sumOt").textContent = "Tăng ca " + hrs(ot);
+    $("sumBase").textContent = money(base);
+    $("sumAllow").textContent = money(allow);
+    $("sumAll").textContent = money(all);
+    $("sumAllSub").textContent = months ? months + " tháng có ghi công" : "Chưa có dữ liệu";
+
+    const days = new Date(y, m, 0).getDate();
+
+    // daily pay bars
+    const bars = $("bars"); bars.textContent = "";
+    let maxPay = 0;
+    for (let d = 1; d <= days; d++) { const e = state.entries.get(state.month + "-" + pad(d)); if (e) maxPay = Math.max(maxPay, payOf(e, otMul)); }
+    for (let d = 1; d <= days; d++) {
+      const date = state.month + "-" + pad(d);
+      const e = state.entries.get(date);
+      const b = document.createElement("div"); b.className = "bar";
+      if (e && maxPay) { b.classList.add("on"); b.style.height = Math.max(8, Math.round(payOf(e, otMul) / maxPay * 100)) + "%"; }
+      if (date === todayStr) b.classList.add("today");
+      bars.appendChild(b);
+    }
+    const axis = $("barsAxis"); axis.textContent = "";
+    [1, 8, 15, 22, days].forEach((d) => { const s = document.createElement("span"); s.textContent = d; axis.appendChild(s); });
+
+    // calendar heatmap
+    const cal = $("cal"); cal.textContent = "";
+    DOW.forEach((d, i) => { const el = document.createElement("div"); el.className = "dow" + (i === 6 ? " sun" : ""); el.textContent = d; cal.appendChild(el); });
+    const lead = (new Date(y, m - 1, 1).getDay() + 6) % 7;
+    for (let i = 0; i < lead; i++) { const el = document.createElement("div"); el.className = "day empty"; cal.appendChild(el); }
+    let maxH = 0;
+    list.forEach((e) => { maxH = Math.max(maxH, (Number(e.hours) || 0) + (Number(e.ot) || 0)); });
+    for (let d = 1; d <= days; d++) {
+      const date = state.month + "-" + pad(d);
+      const e = state.entries.get(date);
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "day";
+      if (new Date(y, m - 1, d).getDay() === 0) btn.classList.add("sun");
+      if (date === todayStr) btn.classList.add("today");
+      if (date === state.selected) btn.classList.add("sel");
+      const dEl = document.createElement("span"); dEl.className = "d"; dEl.textContent = d;
+      const hEl = document.createElement("span"); hEl.className = "h";
+      const mEl = document.createElement("span"); mEl.className = "m";
+      if (e) {
+        const tot = (Number(e.hours) || 0) + (Number(e.ot) || 0);
+        btn.style.background = heat(maxH ? tot / maxH : 0);
+        hEl.textContent = (Math.round(tot * 100) / 100) + "h";
+        mEl.textContent = short(payOf(e, otMul));
+        if (Number(e.ot) > 0) { const o = document.createElement("span"); o.className = "otdot"; btn.appendChild(o); }
+      }
+      btn.append(dEl, hEl, mEl);
+      btn.setAttribute("aria-label", "Ngày " + d + (e ? ", " + e.hours + " giờ, " + money(payOf(e, otMul)) : ", chưa có công"));
+      btn.addEventListener("click", () => { state.selected = date; formDirty = false; fillForm(); render(); $("fHours").focus({ preventScroll: true }); });
+      cal.appendChild(btn);
+    }
+
+    // table
+    const tb = $("tbody"); tb.textContent = "";
+    const tf = $("tfoot"); tf.textContent = "";
+    if (!list.length) {
+      const tr = document.createElement("tr"); const td = document.createElement("td");
+      td.colSpan = 7; td.className = "emptystate";
+      if (state.mode === "loading") td.textContent = "Đang tải dữ liệu…";
+      else {
+        const b = document.createElement("b"); b.textContent = "Tháng này chưa có ngày công";
+        td.append(b, "Chọn một ngày trên bảng chấm công, nhập số giờ rồi bấm Lưu ngày công.");
+      }
+      tr.appendChild(td); tb.appendChild(tr);
+    } else {
+      list.forEach((e) => {
+        const tr = document.createElement("tr");
+        const [, mm, dd] = e.date.split("-");
+        const first = document.createElement("td");
+        const wd = document.createElement("span"); wd.className = "wd"; wd.textContent = DOW[(new Date(e.date + "T00:00:00").getDay() + 6) % 7];
+        first.append(wd, dd + "/" + mm); tr.appendChild(first);
+        [hrs(e.hours), Number(e.ot) ? hrs(e.ot) : "–", money(e.rate), Number(e.allowance) ? money(e.allowance) : "–", money(payOf(e, otMul))].forEach((c, i) => {
+          const td = document.createElement("td"); td.textContent = c; td.className = "num" + (i === 4 ? " pay" : ""); tr.appendChild(td);
+        });
+        const n = document.createElement("td"); n.className = "note l"; n.textContent = e.note || ""; tr.appendChild(n);
+        tr.addEventListener("click", () => { state.selected = e.date; formDirty = false; fillForm(); render(); $("entryForm").scrollIntoView({ behavior: "smooth", block: "nearest" }); });
+        tb.appendChild(tr);
+      });
+      const tr = document.createElement("tr");
+      ["Tổng", hrs(h), ot ? hrs(ot) : "–", "", money(allow), money(total), ""].forEach((c, i) => {
+        const td = document.createElement("td"); td.textContent = c; if (i && i < 6) td.className = "num" + (i === 5 ? " pay" : ""); tr.appendChild(td);
+      });
+      tf.appendChild(tr);
+    }
+  }
+
+  /* ---------- form ---------- */
+  let formDirty = false;
+  function fillForm() {
+    const e = state.entries.get(state.selected);
+    $("fDate").value = state.selected;
+    $("fHours").value = e ? e.hours : "";
+    $("fOt").value = e && Number(e.ot) ? e.ot : "";
+    $("fAllow").value = e ? fmtInput(Number(e.allowance) || 0) : "";
+    $("fRate").value = fmtInput(e ? Number(e.rate) || 0 : state.settings.rate);
+    $("fNote").value = e ? (e.note || "") : "";
+    const [yy, mm, dd] = state.selected.split("-");
+    const dt = new Date(state.selected + "T00:00:00");
+    $("editDate").textContent = dd + "/" + mm;
+    $("editSub").textContent = DOW_LONG[dt.getDay()] + ", " + yy;
+    const badge = $("editBadge");
+    badge.textContent = e ? "Đã lưu" : "Chưa có công";
+    badge.className = "badge" + (e ? " saved" : "");
+    $("delBtn").hidden = !e;
+    $("confirmRow").hidden = true;
+    $("saveBtn").textContent = e ? "Cập nhật ngày công" : "Lưu ngày công";
+    updatePreview();
+  }
+  function fillSettings() {
+    if (document.activeElement !== $("sRate")) $("sRate").value = fmtInput(state.settings.rate);
+    if (document.activeElement !== $("sOt")) $("sOt").value = state.settings.otMul;
+    if (!state.settings.rate && state.mode !== "loading") $("settingsBox").open = true;
+  }
+  function readForm() {
+    return {
+      date: $("fDate").value,
+      hours: Math.max(0, Number($("fHours").value) || 0),
+      ot: Math.max(0, Number($("fOt").value) || 0),
+      allowance: parseMoney($("fAllow").value),
+      rate: parseMoney($("fRate").value),
+      otMul: state.settings.otMul,
+      note: $("fNote").value.trim(),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  function updatePreview() {
+    const f = readForm();
+    $("fTotal").textContent = money(payOf(f, state.settings.otMul));
+    const parts = [];
+    if (f.hours) parts.push(f.hours + "h × " + VND.format(f.rate));
+    if (f.ot) parts.push(f.ot + "h × " + VND.format(f.rate) + " × " + f.otMul);
+    if (f.allowance) parts.push(VND.format(f.allowance) + " phụ cấp");
+    $("fBreak").textContent = parts.join(" + ");
+    document.querySelectorAll("#quickHours button").forEach((b) => b.classList.toggle("on", Number(b.dataset.h) === f.hours));
+  }
+
+  ["fHours", "fOt", "fAllow", "fRate", "fNote"].forEach((id) => $(id).addEventListener("input", () => { formDirty = true; updatePreview(); }));
+  ["fAllow", "fRate", "sRate"].forEach((id) => $(id).addEventListener("blur", () => { $(id).value = fmtInput(parseMoney($(id).value)); }));
+  document.querySelectorAll("#quickHours button").forEach((b) => b.addEventListener("click", () => { $("fHours").value = b.dataset.h; formDirty = true; updatePreview(); }));
+  $("fDate").addEventListener("change", () => {
+    const v = $("fDate").value; if (!v) return;
+    state.selected = v; state.month = v.slice(0, 7); formDirty = false; fillForm(); render();
+  });
+
+  let toastT;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+  function writeErr(err) {
+    if (err && err.code === "invalid_argument" && state.mode === "db") { state.readOnly = true; toast("Bạn chỉ có quyền xem trang này."); }
+    else if (err && err.code === "quota_exceeded") toast("Kho dữ liệu đã đầy. Hãy xóa bớt ngày cũ rồi thử lại.");
+    else toast("Chưa lưu được. Kiểm tra kết nối rồi thử lại.");
+  }
+
+  let saving = false;
+  $("entryForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    if (saving) return;
+    const e = readForm();
+    if (!e.date) { toast("Hãy chọn ngày."); return; }
+    if (!e.hours && !e.ot && !e.allowance) { toast("Nhập số giờ công, giờ tăng ca hoặc phụ cấp."); return; }
+    if (e.hours + e.ot > 24) { toast("Tổng giờ trong một ngày không quá 24."); return; }
+    if (!e.rate && (e.hours || e.ot)) { toast("Nhập lương/giờ để tính tiền."); $("fRate").focus(); return; }
+    saving = true; $("saveBtn").disabled = true;
+    try { await store.putEntry(e); formDirty = false; toast("Đã lưu ngày " + e.date.split("-").reverse().join("/")); state.selected = e.date; fillForm(); render(); }
+    catch (err) { writeErr(err); }
+    finally { saving = false; $("saveBtn").disabled = false; }
+  });
+  $("delBtn").addEventListener("click", () => { $("confirmRow").hidden = false; });
+  $("delNo").addEventListener("click", () => { $("confirmRow").hidden = true; });
+  $("delYes").addEventListener("click", async () => {
+    try { await store.delEntry(state.selected); formDirty = false; toast("Đã xóa ngày công."); fillForm(); render(); }
+    catch (err) { writeErr(err); }
+  });
+  $("saveSettings").addEventListener("click", async () => {
+    const s = { rate: parseMoney($("sRate").value), otMul: Math.min(5, Math.max(1, Number($("sOt").value) || 1.5)) };
+    try { await store.putSettings(s); state.settings = s; toast("Đã lưu cài đặt."); if (!state.entries.get(state.selected)) fillForm(); render(); }
+    catch (err) { writeErr(err); }
+  });
+
+  function shiftMonth(n) {
+    const [y, m] = state.month.split("-").map(Number);
+    state.month = ymd(new Date(y, m - 1 + n, 1)).slice(0, 7);
+    state.selected = state.month === todayStr.slice(0, 7) ? todayStr : state.month + "-01";
+    formDirty = false; fillForm(); render();
+  }
+  $("prevMonth").addEventListener("click", () => shiftMonth(-1));
+  $("nextMonth").addEventListener("click", () => shiftMonth(1));
+  $("thisMonth").addEventListener("click", () => { state.month = todayStr.slice(0, 7); state.selected = todayStr; formDirty = false; fillForm(); render(); });
+
+  fillSettings(); fillForm(); render();
+  connect();
+})();
+</script>

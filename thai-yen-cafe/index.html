@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THAIYEN CAFE</title>
+<meta name="description" content="THAIYEN CAFE – Một thương hiệu cafe đương đại. Hạt cafe rang xay, cafe tiện lợi và hệ thống điểm bán tại Hà Nội, TP Hồ Chí Minh.">
+<link rel="icon" href="https://theme.hstatic.net/1000383842/1001179249/14/favicon.png?v=2814">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f4f0;
+    --ink: #161616;
+    --gray: #4a4c57;
+    --muted: #7b7d86;
+    --line: #e6e3dd;
+    --red: #be1e2d;
+    --red-dark: #9a1724;
+    --dark: #111111;
+    --max: 1200px;
+    --serif: "EB Garamond", Georgia, serif;
+    --sans: "Be Vietnam Pro", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; cursor: pointer; }
+  .container { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+  section { padding: 96px 0; }
+  .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 14px; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.15; }
+  .title { font-size: clamp(2rem, 4.2vw, 3rem); margin-bottom: 14px; }
+  .sub { color: var(--muted); max-width: 560px; }
+  .head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 44px; flex-wrap: wrap; }
+  .link-more { font-size: .88rem; font-weight: 500; border-bottom: 1px solid currentColor; padding-bottom: 2px; white-space: nowrap; }
+  .link-more:hover { color: var(--red); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; font-size: .9rem; font-weight: 500; letter-spacing: .04em; transition: .2s; border: 1px solid transparent; }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover { background: var(--red-dark); }
+  .btn-line { border-color: rgba(255,255,255,.6); color: #fff; }
+  .btn-line:hover { background: #fff; color: var(--ink); }
+
+  /* Top bar */
+  .topbar { background: var(--dark); color: rgba(255,255,255,.75); font-size: .8rem; }
+  .topbar .container { display: flex; justify-content: space-between; align-items: center; height: 38px; gap: 16px; }
+  .topbar a:hover { color: #fff; }
+  .topbar .promo { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 24px; }
+  .logo img { height: 22px; width: auto; }
+  .nav-links { display: flex; gap: 34px; list-style: none; font-size: .86rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .nav-links a { position: relative; padding: 6px 0; }
+  .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px; background: var(--red); transition: right .25s; }
+  .nav-links a:hover::after { right: 0; }
+  .nav-cta { font-size: .82rem; padding: 10px 18px; }
+  .menu-btn { display: none; background: none; border: 0; padding: 8px; }
+  .menu-btn span { display: block; width: 22px; height: 1.5px; background: var(--ink); margin: 6px 0; transition: .3s; }
+
+  /* Hero */
+  .hero { position: relative; min-height: calc(100svh - 114px); display: flex; align-items: flex-end; color: #fff; padding: 0; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: url("https://theme.hstatic.net/1000383842/1001179249/14/home_slider_image_1.jpg?v=2814") center/cover no-repeat; transform: scale(1.04); animation: zoom 18s ease-out forwards; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,.78) 100%); }
+  @keyframes zoom { to { transform: scale(1); } }
+  .hero-inner { position: relative; z-index: 1; padding-bottom: 80px; padding-top: 120px; width: 100%; }
+  .hero .kicker { color: #fff; opacity: .85; }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 5.4rem); max-width: 820px; margin-bottom: 20px; }
+  .hero h1 em { font-style: italic; }
+  .hero p { max-width: 520px; color: rgba(255,255,255,.85); margin-bottom: 32px; font-size: 1.05rem; }
+  .hero .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* Values strip */
+  .values { padding: 0; border-bottom: 1px solid var(--line); }
+  .values .container { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .value { padding: 32px 24px; border-left: 1px solid var(--line); }
+  .value:first-child { border-left: 0; padding-left: 0; }
+  .value strong { display: block; font-family: var(--serif); font-size: 1.9rem; font-weight: 500; color: var(--red); line-height: 1.1; }
+  .value span { font-size: .85rem; color: var(--muted); }
+
+  /* Products */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter { background: none; border: 1px solid var(--line); padding: 8px 18px; font-size: .84rem; color: var(--gray); transition: .2s; }
+  .filter:hover { border-color: var(--ink); color: var(--ink); }
+  .filter.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .grid-products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
+  .product { display: flex; flex-direction: column; }
+  .product.hide { display: none; }
+  .p-img { position: relative; background: var(--bg-soft); aspect-ratio: 1; overflow: hidden; margin-bottom: 16px; }
+  .p-img img { width: 100%; height: 100%; object-fit: contain; transition: transform .5s ease; }
+  .product:hover .p-img img { transform: scale(1.06); }
+  .badge { position: absolute; top: 12px; left: 12px; background: var(--red); color: #fff; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; font-weight: 600; }
+  .p-cat { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .product h3 { font-size: 1.3rem; margin: 2px 0 6px; }
+  .p-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+  .price { font-weight: 600; }
+  .buy { font-size: .8rem; font-weight: 500; border: 1px solid var(--ink); padding: 7px 14px; transition: .2s; }
+  .buy:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* Origin feature */
+  .origin { background: var(--dark); color: #fff; }
+  .origin-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+  .origin-img { aspect-ratio: 4/3; overflow: hidden; }
+  .origin-img img { width: 100%; height: 100%; object-fit: cover; }
+  .origin .sub { color: rgba(255,255,255,.7); margin-bottom: 28px; }
+  .spec { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,.15); margin-bottom: 32px; }
+  .spec div { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.15); }
+  .spec dt { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+  .spec dd { font-family: var(--serif); font-size: 1.2rem; }
+
+  /* About */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+  .about-text p { color: var(--gray); margin-bottom: 16px; }
+  .about-quote { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.35; border-left: 2px solid var(--red); padding-left: 28px; }
+  .about-quote small { display: block; margin-top: 18px; font-family: var(--sans); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+  /* News */
+  #news { background: var(--bg-soft); }
+  .news-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+  .news-main .n-img, .news-side .n-img { overflow: hidden; background: #ddd; }
+  .news-main .n-img { aspect-ratio: 16/10; margin-bottom: 18px; }
+  .n-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+  .news-card:hover .n-img img { transform: scale(1.04); }
+  .news-card h3 { font-size: 1.5rem; margin: 6px 0 8px; transition: color .2s; }
+  .news-card:hover h3 { color: var(--red); }
+  .news-card p { color: var(--gray); font-size: .93rem; }
+  .n-tag { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--red); font-weight: 600; }
+  .news-side { display: grid; gap: 22px; align-content: start; }
+  .news-side .news-card { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: start; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+  .news-side .news-card:last-child { border-bottom: 0; }
+  .news-side .n-img { aspect-ratio: 1; }
+  .news-side h3 { font-size: 1.2rem; }
+  .n-noimg { aspect-ratio: 1; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--serif); font-size: 2.6rem; }
+
+  /* Stores */
+  .store-wrap { display: grid; grid-template-columns: 1fr 1.25fr; gap: 0; border: 1px solid var(--line); }
+  .store-list { display: flex; flex-direction: column; max-height: 560px; }
+  .city-tabs { display: flex; border-bottom: 1px solid var(--line); }
+  .city-tab { flex: 1; background: none; border: 0; padding: 16px; font-size: .84rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; }
+  .city-tab.active { color: var(--ink); border-bottom-color: var(--red); }
+  .stores { overflow-y: auto; flex: 1; }
+  .store { display: block; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 18px 22px; transition: background .2s; }
+  .store:hover { background: var(--bg-soft); }
+  .store.active { background: var(--bg-soft); box-shadow: inset 3px 0 0 var(--red); }
+  .store strong { display: block; font-weight: 500; }
+  .store span { font-size: .84rem; color: var(--muted); }
+  .map { min-height: 420px; background: var(--bg-soft); }
+  .map iframe { width: 100%; height: 100%; min-height: 420px; border: 0; display: block; }
+
+  /* App */
+  .app { background: var(--red); color: #fff; padding: 72px 0; }
+  .app .container { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; }
+  .app .kicker { color: #fff; opacity: .8; }
+  .app p { color: rgba(255,255,255,.85); max-width: 520px; }
+  .app-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .store-btn { display: flex; align-items: center; gap: 12px; background: #111; color: #fff; padding: 12px 22px; min-width: 220px; transition: .2s; }
+  .store-btn:hover { background: #000; transform: translateY(-2px); }
+  .store-btn svg { width: 24px; height: 24px; flex: none; }
+  .store-btn small { display: block; font-size: .68rem; opacity: .7; line-height: 1.2; }
+  .store-btn b { font-weight: 500; font-size: 1rem; line-height: 1.2; }
+  .delivery { font-size: .82rem; opacity: .85; margin-top: 6px; }
+
+  /* Footer */
+  footer { background: var(--dark); color: rgba(255,255,255,.65); padding: 72px 0 28px; font-size: .9rem; }
+  .foot-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .foot-logo { height: 20px; width: auto; filter: invert(1); margin-bottom: 20px; }
+  footer h4 { color: #fff; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; margin-bottom: 18px; }
+  footer ul { list-style: none; display: grid; gap: 10px; }
+  footer a:hover { color: #fff; }
+  .socials { display: flex; gap: 10px; margin-top: 22px; }
+  .socials a { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.25); display: grid; place-items: center; transition: .2s; }
+  .socials a:hover { background: var(--red); border-color: var(--red); }
+  .socials svg { width: 16px; height: 16px; }
+  .copy { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 24px; font-size: .8rem; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .hero-bg { animation: none; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .grid-products { grid-template-columns: repeat(3, 1fr); }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    section { padding: 72px 0; }
+    .menu-btn { display: block; }
+    .nav-cta { display: none; }
+    .nav-links { position: absolute; top: 76px; left: 0; right: 0; flex-direction: column; gap: 0; background: #fff; border-bottom: 1px solid var(--line); max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .nav-links a { display: block; padding: 16px 20px; border-top: 1px solid var(--line); }
+    .nav-links a::after { display: none; }
+    header.open .nav-links { max-height: 420px; }
+    header.open .menu-btn span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    header.open .menu-btn span:nth-child(2) { opacity: 0; }
+    header.open .menu-btn span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .values .container { grid-template-columns: 1fr 1fr; }
+    .value { padding: 24px 16px; }
+    .value:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .value:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .grid-products { grid-template-columns: 1fr 1fr; gap: 24px 14px; }
+    .origin-grid, .about-grid, .news-grid, .store-wrap, .app .container { grid-template-columns: 1fr; gap: 40px; }
+    .store-wrap { gap: 0; }
+    .store-list { max-height: 420px; }
+    .map, .map iframe { min-height: 320px; }
+  }
+  @media (max-width: 520px) {
+    .topbar .promo { display: none; }
+    .topbar .container { justify-content: center; }
+    .product h3 { font-size: 1.1rem; }
+    .p-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .news-side .news-card { grid-template-columns: 100px 1fr; }
+    .foot-grid { grid-template-columns: 1fr; }
+    .spec { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="promo">Tích điểm, đổi quà cùng THAIYEN CLUB — tải app THAIYEN CAFE ngay hôm nay</span>
+    <a href="tel:0989750180">Hotline: 0989 750 180</a>
+  </div>
+</div>
+
+<header id="header">
+  <div class="container nav">
+    <a href="#top" class="logo" aria-label="THAIYEN CAFE – trang chủ">
+      <img src="https://theme.hstatic.net/1000383842/1001179249/14/logo.png?v=2814" alt="THAIYEN">
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#products">Sản phẩm</a></li>
+      <li><a href="#origin">Hạt cafe</a></li>
+      <li><a href="#about">Về THAIYEN</a></li>
+      <li><a href="#news">Tin tức</a></li>
+      <li><a href="#stores">Điểm bán</a></li>
+    </ul>
+    <a href="https://thaiyencafe.com/collections/san-pham-noi-bat" class="btn btn-red nav-cta">Đặt cafe</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-bg" role="img" aria-label="Đồi cafe Mường Ảng, Điện Biên"></div>
+  <div class="container hero-inner">
+    <p class="kicker">THAIYEN CAFE · Hà Nội — TP.HCM</p>
+    <h1>Một thương hiệu cafe <em>đương đại</em></h1>
+    <p>Từ những đồi cafe Việt Nam đến từng ly cafe trên tay bạn — tuyển chọn, rang và pha chế với sự chỉn chu của người làm nghề.</p>
+    <div class="btns">
+      <a href="#products" class="btn btn-red">Khám phá sản phẩm</a>
+      <a href="#stores" class="btn btn-line">Tìm điểm bán gần bạn</a>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values">
+  <div class="container">
+    <div class="value"><strong>10</strong><span>Điểm bán tại Hà Nội &amp; TP.HCM</span></div>
+    <div class="value"><strong>Quán quân</strong><span>ASEAN Coffee Roasting Championship 2026</span></div>
+    <div class="value"><strong>Single Origin</strong><span>Mường Ảng, Điện Biên – Natural</span></div>
+    <div class="value"><strong>7:30 – 22:00</strong><span>Mở cửa mỗi ngày</span></div>
+  </div>
+</section>
+
+<!-- Products -->
+<section id="products">
+  <div class="container">
+    <div class="head-row reveal">
+      <div>
+        <p class="kicker">Đặt cafe</p>
+        <h2 class="title">Sản phẩm nổi bật</h2>
+        <p class="sub">Hạt cafe rang xay, cafe tiện lợi cho mỗi ngày và những món mới tại quầy.</p>
+      </div>
+      <div class="filters" role="tablist">
+        <button class="filter active" data-f="all">Tất cả</button>
+        <button class="filter" data-f="beans">Hạt rang xay</button>
+        <button class="filter" data-f="instant">Cafe tiện lợi</button>
+        <button class="filter" data-f="new">Mới</button>
+      </div>
+    </div>
+
+    <div class="grid-products" id="grid"></div>
+
+    <div style="text-align:center;margin-top:48px">
+      <a href="https://thaiyencafe.com/pages/menu" class="link-more">Xem toàn bộ menu tại điểm bán →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Origin -->
+<section class="origin" id="origin">
+  <div class="container origin-grid">
+    <div class="origin-img reveal">
+      <img src="https://cdn.hstatic.net/files/1000383842/article/muongang_6d334cbdab914fe3a315dbe16b2d2ec5_grande.png" alt="Hạt cafe Mường Ảng, Điện Biên" loading="lazy">
+    </div>
+    <div class="reveal">
+      <p class="kicker">Hạt cafe của tháng</p>
+      <h2 class="title">Mường Ảng — single origin đầu tiên của THAIYEN từ Việt Nam</h2>
+      <p class="sub">Giống Catimor canh tác trên vùng đồi Mường Ảng, Điện Biên, sơ chế Natural để giữ trọn vị ngọt tự nhiên của quả cafe.</p>
+      <dl class="spec">
+        <div><dt>Vùng trồng</dt><dd>Mường Ảng, Điện Biên</dd></div>
+        <div><dt>Giống cafe</dt><dd>Catimor</dd></div>
+        <div><dt>Sơ chế</dt><dd>Natural</dd></div>
+        <div><dt>Phương pháp rang</dt><dd>Omni Roast</dd></div>
+        <div><dt>Hương vị</dt><dd>Trái cây khô, hạnh nhân rang, chocolate</dd></div>
+        <div><dt>Dụng cụ pha</dt><dd>Espresso, V60</dd></div>
+      </dl>
+      <a href="https://thaiyencafe.com/blogs/news/thaiyen-ra-mat-hat-ca-phe-single-origin-dau-tien-tu-viet-nam-dien-bien-muong-ang-natural" class="btn btn-red">Đọc câu chuyện</a>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="container about-grid">
+    <div class="about-quote reveal">
+      “Cafe không chỉ là thức uống — đó là cách chúng ta sống chậm lại, giữa nhịp sống đô thị.”
+      <small>Công ty TNHH Cafe Thái Yên</small>
+    </div>
+    <div class="about-text reveal">
+      <p class="kicker">Về THAIYEN</p>
+      <h2 class="title">Đương đại trong cách làm, Việt Nam trong từng hạt cafe</h2>
+      <p>THAIYEN CAFE theo đuổi cafe chất lượng cao từ khâu chọn hạt, rang đến pha chế. Đội ngũ thợ rang của chúng tôi đã mang về chức quán quân ASEAN Coffee Roasting Championship 2026, và mỗi năm THAIYEN CHAMPIONSHIP lại là sân chơi để các barista thử thách tay nghề.</p>
+      <p>Bên cạnh những ly cafe tại quầy, THAIYEN mang trải nghiệm ấy về nhà bạn qua hạt rang xay Continental, cafe phin giấy, túi nhúng và Nâu Đá hoà tan.</p>
+      <a href="https://thaiyencafe.com/pages/lien-he-1" class="link-more">Liên hệ với chúng tôi →</a>
+    </div>
+  </div>
+</section>
+
+<!-- News -->
+<section id="news">
+  <div class="container">
+    <div class="head-row reveal">
+      <div>
+        <p class="kicker">Tin tức</p>
+        <h2 class="title">Câu chuyện từ THAIYEN</h2>
+      </div>
+      <a href="https://thaiyencafe.com/blogs/news" class="link-more">Xem tất cả tin tức →</a>
+    </div>
+    <div class="news-grid">
+      <a class="news-card news-main reveal" href="https://thaiyencafe.com/blogs/news/we-re-champion-of-coffee-roasting">
+        <div class="n-img"><img src="https://cdn.hstatic.net/files/1000383842/article/dscf5022-dai_dien_bai_viet_d58b2fe104ea46c4a6ff59201c11d0e9_grande.jpg" alt="" loading="lazy"></div>
+        <span class="n-tag">Giải thưởng</span>
+        <h3>We're Champion of Coffee Roasting</h3>
+        <p>Thợ rang Trần Đức Hiếu của THAIYEN trở thành quán quân ASEAN Coffee Roasting Championship 2026.</p>
+      </a>
+      <div class="news-side">
+        <a class="news-card reveal" href="https://thaiyencafe.com/blogs/news/thaiyen-ra-mat-hang-thanh-vien-omnia">
+          <div class="n-img"><img src="https://cdn.hstatic.net/files/1000383842/article/banner_hang_omnia_3a9267bbf0a24938b627211f9084d094_grande.png" alt="" loading="lazy"></div>
+          <div><span class="n-tag">THAIYEN CLUB</span><h3>Ra mắt hạng thành viên OMNIA</h3></div>
+        </a>
+        <a class="news-card reveal" href="https://thaiyencafe.com/blogs/news/thaiyen-championship-2026-san-choi-danh-cho-tai-nang-barista">
+          <div class="n-noimg">Y</div>
+          <div><span class="n-tag">Sự kiện</span><h3>THAIYEN CHAMPIONSHIP 2026 — sân chơi cho tài năng barista</h3></div>
+        </a>
+        <a class="news-card reveal" href="https://thaiyencafe.com/blogs/news/thaiyen-ra-mat-cafe-nau-da-phien-ban-hoa-tan">
+          <div class="n-img"><img src="https://cdn.hstatic.net/products/1000383842/nau_da_6c137a0e20674a438644f9a08cbb3ab9_large.png" alt="" loading="lazy" style="object-fit:contain;background:#f6f4f0"></div>
+          <div><span class="n-tag">Sản phẩm mới</span><h3>Cafe Nâu Đá phiên bản hoà tan</h3></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stores -->
+<section id="stores">
+  <div class="container">
+    <div class="head-row reveal">
+      <div>
+        <p class="kicker">Điểm bán</p>
+        <h2 class="title">Ghé THAIYEN gần bạn</h2>
+        <p class="sub">Chọn một điểm bán để xem vị trí trên bản đồ.</p>
+      </div>
+      <a href="https://thaiyencafe.com/pages/diem-ban" class="link-more">Tất cả điểm bán →</a>
+    </div>
+    <div class="store-wrap reveal">
+      <div class="store-list">
+        <div class="city-tabs">
+          <button class="city-tab active" data-city="hn">Hà Nội (7)</button>
+          <button class="city-tab" data-city="hcm">TP.HCM (3)</button>
+        </div>
+        <div class="stores" id="stores-list"></div>
+      </div>
+      <div class="map"><iframe id="map" title="Bản đồ điểm bán THAIYEN" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    </div>
+  </div>
+</section>
+
+<!-- App -->
+<section class="app">
+  <div class="container">
+    <div>
+      <p class="kicker">App THAIYEN CAFE</p>
+      <h2 class="title">Đặt hàng, tích điểm, đổi quà</h2>
+      <p>Tham gia THAIYEN CLUB để nhận ưu đãi thành viên, tích điểm mỗi lần mua và đặt món nhanh tại điểm bán gần nhất.</p>
+    </div>
+    <div class="app-actions">
+      <a class="store-btn" href="https://apps.apple.com/vn/app/thaiyen-cafe/id1661273802?l=vi" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.8 1.2 1.8 2.6 3.1 2.5 1.3 0 1.7-.8 3.3-.8 1.5 0 1.9.8 3.3.8 1.4 0 2.2-1.2 3-2.5 1-1.4 1.4-2.8 1.4-2.8s-2.6-1-2.4-4.1zM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.2.7-3 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.3-.6 3-1.3z"/></svg>
+        <span><small>Tải về trên</small><b>App Store</b></span>
+      </a>
+      <a class="store-btn" href="https://play.google.com/store/apps/details?id=thaiyen.app" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 1.8c-.3.3-.4.7-.4 1.2v18c0 .5.1.9.4 1.2L13.8 12 3.6 1.8zM14.9 13.1l2.9 2.9-11.3 6.4 8.4-9.3zM14.9 10.9 6.5 1.6l11.3 6.4-2.9 2.9zM19 9l3 1.7c.9.5.9 2.1 0 2.6L19 15l-3-3 3-3z"/></svg>
+        <span><small>Tải về trên</small><b>Google Play</b></span>
+      </a>
+      <p class="delivery">Giao hàng qua GrabFood · ShopeeFood · GreenSM</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <img class="foot-logo" src="https://theme.hstatic.net/1000383842/1001179249/14/logo.png?v=2814" alt="THAIYEN">
+        <p>Công ty TNHH Cafe Thái Yên<br>186 Quán Thánh, Phường Ba Đình, TP Hà Nội</p>
+        <p style="margin-top:10px">Hotline: <a href="tel:0989750180">0989 750 180</a><br>Email: <a href="mailto:info@thaiyencafe.com">info@thaiyencafe.com</a></p>
+        <div class="socials">
+          <a href="https://facebook.com/THAIYENCAFE" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.2-1.3 1.4-1.3H17V2.2C16.6 2.1 15.5 2 14.3 2 11.7 2 10 3.6 10 6.4V8H7v3.4h3V22h4V11.4h3l.5-3.4z"/></svg></a>
+          <a href="https://instagram.com/thaiyencafe" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="https://www.tiktok.com/@thaiyencafe" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9a7.4 7.4 0 0 0 4.3 1.4V7.3a4.3 4.3 0 0 1-3.2-1.5z"/></svg></a>
+          <a href="https://www.youtube.com/@THAIYENCAFE" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15V9l5.7 3-5.7 3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Sản phẩm</h4>
+        <ul>
+          <li><a href="https://thaiyencafe.com/collections/combo">Combo</a></li>
+          <li><a href="https://thaiyencafe.com/collections/cafe-tuoi">Ly cafe</a></li>
+          <li><a href="https://thaiyencafe.com/collections/chai-cafe-1">Chai cafe</a></li>
+          <li><a href="https://thaiyencafe.com/collections/hat-cafe-1">Hạt cafe rang xay</a></li>
+          <li><a href="https://thaiyencafe.com/collections/banh-va-do-trang-mieng">Bánh &amp; tráng miệng</a></li>
+          <li><a href="https://thaiyencafe.com/collections/dung-cu-pha-cafe">Dụng cụ pha cafe</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Khám phá</h4>
+        <ul>
+          <li><a href="https://thaiyencafe.com/blogs/uu-dai">Ưu đãi</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/thaiyen-loyalty">THAIYEN CLUB</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/huong-dan">Hướng dẫn pha cafe</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/blog">Blog</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/dich-vu-tiec-cafe">Dịch vụ tiệc cafe</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/tin-tuyen-dung">Tuyển dụng</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hỗ trợ</h4>
+        <ul>
+          <li><a href="https://thaiyencafe.com/pages/lien-he-1">Liên hệ</a></li>
+          <li><a href="https://thaiyencafe.com/pages/gopy">Hòm thư góp ý</a></li>
+          <li><a href="https://thaiyencafe.com/blogs/hop-tac-doanh-nghiep">Hợp tác doanh nghiệp</a></li>
+          <li><a href="https://thaiyencafe.com/pages/chinh-sach-doi-tra">Chính sách đổi trả</a></li>
+          <li><a href="https://thaiyencafe.com/pages/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
+          <li><a href="https://thaiyencafe.com/pages/dieu-khoan-dich-vu">Điều khoản dịch vụ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">
+      <span>© <span id="year"></span> THAIYEN CAFE. All rights reserved.</span>
+      <span>Một thương hiệu cafe đương đại</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const CDN = 'https://cdn.hstatic.net/products/1000383842/';
+  const SHOP = 'https://thaiyencafe.com';
+  const products = [
+    { name: 'Continental Cherry', cat: 'Hạt rang xay 250g', f: 'beans', price: 195000, img: 'cc250_36932fcf71b34b829558dd21a3a3d1ad_large.png', url: '/products/cherry' },
+    { name: 'Continental Deep', cat: 'Hạt rang xay 250g', f: 'beans', price: 290000, img: 'cd250_f525754fe9ee4b9ab504b301816e5c56_large.png', url: '/products/continental-deep' },
+    { name: 'Continental Fusion', cat: 'Hạt rang xay 250g', f: 'beans', price: 290000, img: 'cf250_9d1c260dc4fa45a2bbd87451ebfd1786_large.png', url: '/collections/hat-cafe-1' },
+    { name: 'Hộp Cafe Hoà Tan', cat: 'Cafe tiện lợi', f: 'instant', price: 95000, img: 'nau_da_6c137a0e20674a438644f9a08cbb3ab9_large.png', url: '/products/cafe-nau-da' },
+    { name: 'Hộp Cafe Phin Giấy', cat: 'Cafe tiện lợi', f: 'instant', price: 155000, img: 'phin_gi_y_81300204a8a2447e89b1b3faaffac4bc_large.png', url: '/collections/san-pham-noi-bat' },
+    { name: 'Hộp Cafe Túi Nhúng', cat: 'Cafe tiện lợi', f: 'instant', price: 195000, img: 't_i_nh_ng_92cacdc135b54c87b1f661fff00a9b0b_large.png', url: '/collections/san-pham-noi-bat' },
+    { name: 'Cafe Muối', cat: 'Ly cafe', f: 'new', price: 65000, img: 'cafe_mu_i_dine_in_16c70ff087484425a53a8d32ec5009f1_large.png', url: '/products/cafe-muoi', isNew: true },
+    { name: 'Tiramisu', cat: 'Bánh & tráng miệng', f: 'new', price: 95000, img: 'tira_4cecbc60381b4eefb091660f062df410_large.png', url: '/collections/banh-va-do-trang-mieng', isNew: true },
+    { name: 'Cheese Burnt', cat: 'Bánh & tráng miệng', f: 'new', price: 60000, img: 'cheesse_5f3db8a48747404db3704491ce9644b6_large.png', url: '/products/cheese-cake', isNew: true },
+  ];
+  const vnd = n => n.toLocaleString('vi-VN') + 'đ';
+  const grid = document.getElementById('grid');
+  grid.innerHTML = products.map(p => `
+    <article class="product reveal" data-f="${p.f}">
+      <a class="p-img" href="${SHOP + p.url}">
+        ${p.isNew ? '<span class="badge">Mới</span>' : ''}
+        <img src="${CDN + p.img}" alt="${p.name}" loading="lazy">
+      </a>
+      <span class="p-cat">${p.cat}</span>
+      <h3>${p.name}</h3>
+      <div class="p-foot">
+        <span class="price">${vnd(p.price)}</span>
+        <a class="buy" href="${SHOP + p.url}">Đặt mua</a>
+      </div>
+    </article>`).join('');
+
+  document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    grid.querySelectorAll('.product').forEach(el => el.classList.toggle('hide', f !== 'all' && el.dataset.f !== f));
+  }));
+
+  // Stores
+  const stores = {
+    hn: [
+      ['182 – 184 Quán Thánh', 'P. Ba Đình, Hà Nội', '7:30 – 22:00'],
+      ['24 Huỳnh Thúc Kháng', 'P. Giảng Võ, Hà Nội', '7:30 – 22:00'],
+      ['Lotte Mall Tây Hồ', '272 Võ Chí Công, P. Phú Thượng, Hà Nội', '7:30 – 22:00'],
+      ['174 Thái Hà', 'P. Đống Đa, Hà Nội', '7:30 – 22:00'],
+      ['71A Nguyễn Du', 'P. Hai Bà Trưng, Hà Nội', '7:30 – 22:00'],
+      ['21 Ngõ 42 Giang Văn Minh', 'P. Ba Đình, Hà Nội', '7:30 – 18:00'],
+      ['9 Ngõ 539 Nguyễn Văn Cừ', 'P. Bồ Đề, Hà Nội', '7:30 – 22:00'],
+    ],
+    hcm: [
+      ['80 Nguyễn Du', 'Phường Sài Gòn, TP.HCM', '7:30 – 22:00'],
+      ['40B Phạm Ngọc Thạch', 'P. Xuân Hoà, TP.HCM', '7:30 – 22:00'],
+      ['32 Nguyễn Đình Chiểu', 'P. Tân Định, TP.HCM', '7:30 – 22:00'],
+    ],
+  };
+  const list = document.getElementById('stores-list');
+  const map = document.getElementById('map');
+  const showMap = (s) => {
+    map.src = 'https://www.google.com/maps?q=' + encodeURIComponent('THAIYEN CAFE ' + s[0] + ', ' + s[1]) + '&output=embed';
+  };
+  const renderCity = (city) => {
+    list.innerHTML = stores[city].map((s, i) => `
+      <button class="store${i === 0 ? ' active' : ''}" data-i="${i}">
+        <strong>${s[0]}</strong><span>${s[1]} · ${s[2]}</span>
+      </button>`).join('');
+    list.querySelectorAll('.store').forEach(b => b.addEventListener('click', () => {
+      list.querySelectorAll('.store').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      showMap(stores[city][b.dataset.i]);
+    }));
+    showMap(stores[city][0]);
+  };
+  document.querySelectorAll('.city-tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.city-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    renderCity(t.dataset.city);
+  }));
+  renderCity('hn');
+
+  // Mobile menu
+  const header = document.getElementById('header');
+  const menuBtn = document.getElementById('menuBtn');
+  menuBtn.addEventListener('click', () => menuBtn.setAttribute('aria-expanded', header.classList.toggle('open')));
+  document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => {
+    header.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false);
+  }));
+
+  // Reveal
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
