@@ -226,6 +226,21 @@ button.ghost-danger:hover { border-color: var(--danger); }
 .day .otdot { position: absolute; top: 9px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--warm); }
 .day.today .d { background: var(--ink); color: var(--surface); border-radius: 1px; padding: 0 6px; justify-self: start; }
 .day.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+/* Ngày lễ: vạch đỏ trên đầu ô + nhãn x3 */
+.day.hol { box-shadow: inset 0 3px 0 var(--accent); }
+.day.hol.sel { box-shadow: inset 0 3px 0 var(--accent), 0 0 0 1px var(--accent) inset; }
+.hx { display: inline-block; font-size: 0.68rem; font-weight: 700; line-height: 1; padding: 3px 5px; border-radius: 1px; background: var(--accent); color: var(--accent-ink); letter-spacing: 0.02em; font-family: var(--font-num); vertical-align: 1px; }
+.day .hx { position: absolute; top: 8px; right: 7px; }
+.day.hol .otdot { right: 34px; top: 11px; }
+td .hx { margin-left: 6px; }
+.hol-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; align-items: center; font-size: 0.8rem; }
+.hol-list > span:first-child { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.hol-list .hchip { padding: 4px 10px; border: 1px solid var(--line); border-left: 3px solid var(--accent); background: var(--surface); border-radius: 1px; }
+.hol-list .hchip b { font-family: var(--font-num); font-weight: 700; margin-right: 6px; }
+.holnote { margin: 8px 0 0; font-size: 0.8rem; color: var(--accent-strong); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.check { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 2px; cursor: pointer; font-size: 0.88rem; }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; flex: none; }
+.check small { display: block; color: var(--muted); font-size: 0.76rem; }
 
 /* Editor */
 .editor { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
@@ -309,6 +324,8 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
   .day .m { display: none; }
   .day .h { font-size: 1rem; }
   .day .otdot { top: 6px; right: 6px; }
+  .day .hx { top: 5px; right: 4px; padding: 2px 3px; font-size: 0.62rem; }
+  .day.hol .otdot { top: auto; bottom: 6px; right: 6px; }
   .cal { gap: 3px; }
   .pill .label { min-width: 110px; }
 }
@@ -373,9 +390,11 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         <div class="legend">
           <span>Ít giờ<span class="scale" id="legendScale"></span>Nhiều giờ</span>
           <span><span class="dot"></span>Có tăng ca</span>
+          <span><span class="hx" id="legendHol">x3</span> Ngày lễ</span>
         </div>
       </div>
       <div class="cal" id="cal"></div>
+      <div class="hol-list" id="holList" hidden></div>
       <div class="cal-strip">
         <div class="txt">
           <b>Cafe tiện lợi THAIYEN</b>
@@ -398,6 +417,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         <div>
           <p class="date-big" id="editDate">16/11</p>
           <p class="date-sub" id="editSub">Thứ Hai, 2026</p>
+          <p class="holnote" id="editHol" hidden></p>
         </div>
         <span class="badge" id="editBadge">Chưa có công</span>
       </div>
@@ -434,6 +454,10 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
           <label for="fNote">Ghi chú</label>
           <textarea id="fNote" placeholder="Ví dụ: ca tối, phụ cấp xăng xe"></textarea>
         </div>
+        <label class="check" for="fHol">
+          <input type="checkbox" id="fHol">
+          <span><span id="fHolLabel">Tính lương ngày lễ (x3)</span><small id="fHolHint">Tự bật cho ngày lễ, Tết theo luật. Bỏ chọn hoặc tự chọn nếu lịch quán khác.</small></span>
+        </label>
         <div class="preview"><span>Tiền ngày này</span><strong id="fTotal">0 ₫</strong><em id="fBreak"></em></div>
         <div class="actions">
           <button type="submit" class="primary" id="saveBtn">Lưu ngày công</button>
@@ -471,7 +495,13 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
               <input type="number" id="sMin" min="0.5" max="24" step="0.5" placeholder="8">
             </div>
           </div>
-          <p class="hint">Lương/giờ mặc định được điền sẵn cho ngày mới. Ngày đã lưu giữ nguyên mức lương lúc lưu. Phụ cấp ca dài tự cộng cho mọi ngày có tổng giờ (gồm tăng ca) đạt ngưỡng; để trống hoặc 0 để tắt.</p>
+          <div class="row2">
+            <div class="field">
+              <label for="sHol">Hệ số ngày lễ</label>
+              <input type="number" id="sHol" min="1" max="10" step="0.5" placeholder="3">
+            </div>
+          </div>
+          <p class="hint">Lương/giờ mặc định được điền sẵn cho ngày mới. Ngày đã lưu giữ nguyên mức lương lúc lưu. Phụ cấp ca dài tự cộng cho mọi ngày có tổng giờ (gồm tăng ca) đạt ngưỡng; để trống hoặc 0 để tắt. Ngày lễ, Tết: mọi giờ làm (cả tăng ca) nhân theo hệ số ngày lễ.</p>
           <button type="button" id="saveSettings">Lưu cài đặt</button>
         </div>
       </details>
@@ -553,9 +583,74 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
   // legend scale
   [0, 0.33, 0.66, 1].forEach((t) => { const b = document.createElement("b"); b.style.background = heat(t); $("legendScale").appendChild(b); });
 
+  /* ---------- âm lịch (thuật toán Hồ Ngọc Đức, múi giờ +7) ---------- */
+  const INT = Math.floor;
+  const jdFromDate = (dd, mm, yy) => { const a = INT((14 - mm) / 12), y = yy + 4800 - a, m = mm + 12 * a - 3;
+    return dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045; };
+  const jdToDate = (jd) => { const a = jd + 32044, b = INT((4 * a + 3) / 146097), c = a - INT((b * 146097) / 4);
+    const d = INT((4 * c + 3) / 1461), e = c - INT((1461 * d) / 4), m = INT((5 * e + 2) / 153);
+    return [e - INT((153 * m + 2) / 5) + 1, m + 3 - 12 * INT(m / 10), b * 100 + d - 4800 + INT(m / 10)]; };
+  function newMoonDay(k) {
+    const T = k / 1236.85, T2 = T * T, T3 = T2 * T, dr = Math.PI / 180, s = Math.sin;
+    const J = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3 + 0.00033 * s((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+    const M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+    const Mp = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+    const F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+    const C = (0.1734 - 0.000393 * T) * s(M * dr) + 0.0021 * s(2 * dr * M) - 0.4068 * s(Mp * dr) + 0.0161 * s(dr * 2 * Mp) - 0.0004 * s(dr * 3 * Mp)
+      + 0.0104 * s(dr * 2 * F) - 0.0051 * s(dr * (M + Mp)) - 0.0074 * s(dr * (M - Mp)) + 0.0004 * s(dr * (2 * F + M)) - 0.0004 * s(dr * (2 * F - M))
+      - 0.0006 * s(dr * (2 * F + Mp)) + 0.0010 * s(dr * (2 * F - Mp)) + 0.0005 * s(dr * (2 * Mp + M));
+    const dt = T < -11 ? 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3 : -0.000278 + 0.000265 * T + 0.000262 * T2;
+    return INT(J + C - dt + 0.5 + 7 / 24);
+  }
+  function sunLong(jdn) {
+    const T = (jdn - 0.5 - 7 / 24 - 2451545.0) / 36525, T2 = T * T, dr = Math.PI / 180;
+    const M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2, L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+    const DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M) + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+    let L = (L0 + DL) * dr; L -= Math.PI * 2 * INT(L / (Math.PI * 2));
+    return INT(L / Math.PI * 6);
+  }
+  const month11 = (y) => { const k = INT((jdFromDate(31, 12, y) - 2415021) / 29.530588853); const nm = newMoonDay(k); return sunLong(nm) >= 9 ? newMoonDay(k - 1) : nm; };
+  function leapOffset(a11) {
+    const k = INT((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+    let last, i = 1, arc = sunLong(newMoonDay(k + i));
+    do { last = arc; i++; arc = sunLong(newMoonDay(k + i)); } while (arc !== last && i < 14);
+    return i - 1;
+  }
+  // ngày ld tháng lm (không nhuận) năm âm ly -> số ngày Julius
+  function lunarToJd(ld, lm, ly) {
+    const a11 = lm < 11 ? month11(ly - 1) : month11(ly), b11 = lm < 11 ? month11(ly) : month11(ly + 1);
+    const k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853);
+    let off = lm - 11; if (off < 0) off += 12;
+    if (b11 - a11 > 365 && off >= leapOffset(a11)) off += 1;
+    return newMoonDay(k + off) + ld - 1;
+  }
+
+  /* ---------- ngày lễ, Tết hưởng lương (Điều 112 BLLĐ 2019 + Ngày Văn hóa Việt Nam 24/11 từ 2026) ---------- */
+  const HOL_CACHE = new Map();
+  function holidaysOf(y) {
+    if (HOL_CACHE.has(y)) return HOL_CACHE.get(y);
+    const m = new Map();
+    const fix = (mo, d, name) => m.set(y + "-" + pad(mo) + "-" + pad(d), name);
+    const lunar = (jd, name) => { const [d, mo, yy] = jdToDate(jd); if (yy === y) m.set(yy + "-" + pad(mo) + "-" + pad(d), name); };
+    fix(1, 1, "Tết Dương lịch");
+    // Tết Âm lịch 5 ngày: 1 ngày cuối năm + mùng 1–4 (phương án Nhà nước chọn năm 2026)
+    const tet = lunarToJd(1, 1, y);
+    lunar(tet - 1, "Tết Nguyên đán · Giao thừa");
+    for (let i = 0; i < 4; i++) lunar(tet + i, "Tết Nguyên đán · Mùng " + (i + 1));
+    lunar(lunarToJd(10, 3, y), "Giỗ Tổ Hùng Vương (10/3 âm)");
+    fix(4, 30, "Giải phóng miền Nam");
+    fix(5, 1, "Quốc tế Lao động");
+    fix(9, 1, "Nghỉ lễ Quốc khánh");
+    fix(9, 2, "Quốc khánh");
+    if (y >= 2026) fix(11, 24, "Ngày Văn hóa Việt Nam");
+    HOL_CACHE.set(y, m);
+    return m;
+  }
+  const holName = (date) => (date && date.length >= 10 ? holidaysOf(Number(date.slice(0, 4))).get(date) : "") || "";
+
   const state = {
     entries: new Map(),
-    settings: { rate: 0, otMul: 1.5, shiftBonus: 30000, shiftMin: 8 },
+    settings: { rate: 0, otMul: 1.5, shiftBonus: 30000, shiftMin: 8, holMul: 3 },
     month: todayStr.slice(0, 7),
     selected: todayStr,
     mode: "loading",
@@ -568,10 +663,15 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     const t = (Number(e.hours) || 0) + (Number(e.ot) || 0);
     return s.shiftBonus > 0 && t >= (Number(s.shiftMin) || 8) ? Number(s.shiftBonus) : 0;
   };
+  // Ngày lễ: tự theo lịch, trừ khi ngày đó được đánh dấu tay (e.holiday = true/false)
+  const isHol = (e) => typeof e.holiday === "boolean" ? e.holiday : !!holName(e.date);
+  const holMul = () => Number(state.settings.holMul) || 3;
   const payOf = (e, otMul) => {
     const rate = Number(e.rate) || 0;
     const mul = Number(e.otMul) || otMul || 1.5;
-    return (Number(e.hours) || 0) * rate + (Number(e.ot) || 0) * rate * mul + (Number(e.allowance) || 0) + bonusOf(e);
+    const h = Number(e.hours) || 0, o = Number(e.ot) || 0;
+    const work = isHol(e) ? h * rate * holMul() + o * rate * Math.max(mul, holMul()) : h * rate + o * rate * mul;
+    return work + (Number(e.allowance) || 0) + bonusOf(e);
   };
 
   /* ---------- storage: shared db when available, this browser otherwise ---------- */
@@ -634,7 +734,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
       render(); if (!formDirty) fillForm();
     }, (err) => { clearTimeout(timer); setStatus("warn", "Mất kết nối dữ liệu (" + err.code + ")"); });
     db.doc("config/main").onSnapshot((snap) => {
-      if (snap.exists) { const v = snap.data(); state.settings = { rate: Number(v.rate) || 0, otMul: Number(v.otMul) || 1.5, shiftBonus: v.shiftBonus == null ? 30000 : Number(v.shiftBonus) || 0, shiftMin: Number(v.shiftMin) || 8 }; }
+      if (snap.exists) { const v = snap.data(); state.settings = { rate: Number(v.rate) || 0, otMul: Number(v.otMul) || 1.5, shiftBonus: v.shiftBonus == null ? 30000 : Number(v.shiftBonus) || 0, shiftMin: Number(v.shiftMin) || 8, holMul: Number(v.holMul) || 3 }; }
       if (!snap.metadata.fromCache) { firstCfg = true; done(); }
       fillSettings(); render(); if (!formDirty) fillForm();
     }, () => {});
@@ -675,6 +775,20 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     $("sumAllSub").textContent = months ? months + " tháng có ghi công" : "Chưa có dữ liệu";
 
     const days = new Date(y, m, 0).getDate();
+    const hx = "x" + holMul().toLocaleString("vi-VN");
+    $("legendHol").textContent = hx;
+
+    // ngày lễ trong tháng
+    const hl = $("holList"); hl.textContent = "";
+    for (let d = 1; d <= days; d++) {
+      const date = state.month + "-" + pad(d), name = holName(date);
+      if (!name) continue;
+      const c = document.createElement("span"); c.className = "hchip";
+      const b = document.createElement("b"); b.textContent = d + "/" + m;
+      c.append(b, name); hl.appendChild(c);
+    }
+    if (hl.childNodes.length) { const t = document.createElement("span"); t.textContent = "Ngày lễ tháng này · " + hx; hl.prepend(t); }
+    hl.hidden = !hl.childNodes.length;
 
     // daily pay bars
     const bars = $("bars"); bars.textContent = "";
@@ -716,8 +830,14 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         mEl.textContent = short(payOf(e, otMul));
         if (Number(e.ot) > 0) { const o = document.createElement("span"); o.className = "otdot"; btn.appendChild(o); }
       }
+      const hname = holName(date), hol = e ? isHol(e) : !!hname;
+      if (hol) {
+        btn.classList.add("hol");
+        const t = document.createElement("span"); t.className = "hx"; t.textContent = hx; btn.appendChild(t);
+        btn.title = (hname || "Ngày lễ (tự đánh dấu)") + " · lương " + hx;
+      }
       btn.append(dEl, hEl, mEl);
-      btn.setAttribute("aria-label", "Ngày " + d + (e ? ", " + e.hours + " giờ, " + money(payOf(e, otMul)) : ", chưa có công"));
+      btn.setAttribute("aria-label", "Ngày " + d + (hol ? ", " + (hname || "ngày lễ") + ", lương " + hx : "") + (e ? ", " + e.hours + " giờ, " + money(payOf(e, otMul)) : ", chưa có công"));
       btn.addEventListener("click", () => { state.selected = date; formDirty = false; fillForm(); render(); $("fHours").focus({ preventScroll: true }); });
       cal.appendChild(btn);
     }
@@ -743,7 +863,9 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
         const [, mm, dd] = e.date.split("-");
         const first = document.createElement("td");
         const wd = document.createElement("span"); wd.className = "wd"; wd.textContent = DOW[(new Date(e.date + "T00:00:00").getDay() + 6) % 7];
-        first.append(wd, dd + "/" + mm); tr.appendChild(first);
+        first.append(wd, dd + "/" + mm);
+        if (isHol(e)) { const t = document.createElement("span"); t.className = "hx"; t.textContent = hx; t.title = holName(e.date) || "Ngày lễ"; first.appendChild(t); }
+        tr.appendChild(first);
         [hrs(e.hours), Number(e.ot) ? hrs(e.ot) : "–", money(e.rate), ((Number(e.allowance) || 0) + bonusOf(e)) ? money((Number(e.allowance) || 0) + bonusOf(e)) : "–", money(payOf(e, otMul))].forEach((c, i) => {
           const td = document.createElement("td"); td.textContent = c; td.className = "num" + (i === 4 ? " pay" : ""); tr.appendChild(td);
         });
@@ -773,6 +895,11 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     const dt = new Date(state.selected + "T00:00:00");
     $("editDate").textContent = dd + "/" + mm;
     $("editSub").textContent = DOW_LONG[dt.getDay()] + ", " + yy;
+    const hname = holName(state.selected);
+    $("editHol").hidden = !hname;
+    $("editHol").textContent = hname ? hname + " · lương x" + holMul().toLocaleString("vi-VN") : "";
+    $("fHol").checked = e ? isHol(e) : !!hname;
+    $("fHolLabel").textContent = "Tính lương ngày lễ (x" + holMul().toLocaleString("vi-VN") + ")";
     const badge = $("editBadge");
     badge.textContent = e ? "Đã lưu" : "Chưa có công";
     badge.className = "badge" + (e ? " saved" : "");
@@ -786,11 +913,13 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     if (document.activeElement !== $("sOt")) $("sOt").value = state.settings.otMul;
     if (document.activeElement !== $("sBonus")) $("sBonus").value = fmtInput(state.settings.shiftBonus);
     if (document.activeElement !== $("sMin")) $("sMin").value = state.settings.shiftMin;
+    if (document.activeElement !== $("sHol")) $("sHol").value = state.settings.holMul;
     if (!state.settings.rate && state.mode !== "loading") $("settingsBox").open = true;
   }
   function readForm() {
-    return {
-      date: $("fDate").value,
+    const date = $("fDate").value;
+    const f = {
+      date,
       hours: Math.max(0, Number($("fHours").value) || 0),
       ot: Math.max(0, Number($("fOt").value) || 0),
       allowance: parseMoney($("fAllow").value),
@@ -799,20 +928,25 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
       note: $("fNote").value.trim(),
       updatedAt: new Date().toISOString(),
     };
+    // chỉ lưu đánh dấu tay khi khác với lịch lễ tự động
+    const chk = $("fHol").checked;
+    if (chk !== !!holName(date)) f.holiday = chk;
+    return f;
   }
   function updatePreview() {
     const f = readForm();
     $("fTotal").textContent = money(payOf(f, state.settings.otMul));
     const parts = [];
-    if (f.hours) parts.push(f.hours + "h × " + VND.format(f.rate));
-    if (f.ot) parts.push(f.ot + "h × " + VND.format(f.rate) + " × " + f.otMul);
+    const hol = isHol(f), H = holMul();
+    if (f.hours) parts.push(f.hours + "h × " + VND.format(f.rate) + (hol ? " × " + H + " (lễ)" : ""));
+    if (f.ot) parts.push(f.ot + "h × " + VND.format(f.rate) + " × " + (hol ? Math.max(f.otMul, H) + " (lễ)" : f.otMul));
     if (f.allowance) parts.push(VND.format(f.allowance) + " phụ cấp");
     const sb = bonusOf(f); if (sb) parts.push(VND.format(sb) + " phụ cấp ca ≥" + state.settings.shiftMin + "h");
     $("fBreak").textContent = parts.join(" + ");
     document.querySelectorAll("#quickHours button").forEach((b) => b.classList.toggle("on", Number(b.dataset.h) === f.hours));
   }
 
-  ["fHours", "fOt", "fAllow", "fRate", "fNote"].forEach((id) => $(id).addEventListener("input", () => { formDirty = true; updatePreview(); }));
+  ["fHours", "fOt", "fAllow", "fRate", "fNote", "fHol"].forEach((id) => $(id).addEventListener("input", () => { formDirty = true; updatePreview(); }));
   ["fAllow", "fRate", "sRate", "sBonus"].forEach((id) => $(id).addEventListener("blur", () => { $(id).value = fmtInput(parseMoney($(id).value)); }));
   document.querySelectorAll("#quickHours button").forEach((b) => b.addEventListener("click", () => { $("fHours").value = b.dataset.h; formDirty = true; updatePreview(); }));
   $("fDate").addEventListener("change", () => {
@@ -849,7 +983,7 @@ tfoot td { font-weight: 600; border-bottom: none; border-top: 2px solid var(--in
     catch (err) { writeErr(err); }
   });
   $("saveSettings").addEventListener("click", async () => {
-    const s = { rate: parseMoney($("sRate").value), otMul: Math.min(5, Math.max(1, Number($("sOt").value) || 1.5)), shiftBonus: parseMoney($("sBonus").value), shiftMin: Math.min(24, Math.max(0.5, Number($("sMin").value) || 8)) };
+    const s = { rate: parseMoney($("sRate").value), otMul: Math.min(5, Math.max(1, Number($("sOt").value) || 1.5)), shiftBonus: parseMoney($("sBonus").value), shiftMin: Math.min(24, Math.max(0.5, Number($("sMin").value) || 8)), holMul: Math.min(10, Math.max(1, Number($("sHol").value) || 3)) };
     try { await store.putSettings(s); state.settings = s; toast("Đã lưu cài đặt."); if (!state.entries.get(state.selected)) fillForm(); render(); }
     catch (err) { writeErr(err); }
   });
